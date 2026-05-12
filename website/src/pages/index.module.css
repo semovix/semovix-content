@@ -1,0 +1,285 @@
+.page {
+  background:
+    radial-gradient(circle at top left, rgba(20, 184, 212, 0.16), transparent 34rem),
+    radial-gradient(circle at 85% 16%, rgba(37, 99, 235, 0.12), transparent 28rem),
+    linear-gradient(180deg, #f8fbff 0%, #ffffff 45%, #f6f8fb 100%);
+}
+
+.hero {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 96px 24px 72px;
+  text-align: center;
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.06);
+  color: #2563eb;
+  font-size: 14px;
+  font-weight: 800;
+  margin-bottom: 24px;
+}
+
+.hero h1 {
+  max-width: 960px;
+  margin: 0 auto;
+  font-size: clamp(42px, 6vw, 78px);
+  line-height: 1.04;
+  letter-spacing: -0.06em;
+  color: #0b1f3a;
+}
+
+.gradientText {
+  background: linear-gradient(135deg, #2563eb, #14b8d4 58%, #10b981);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.subtitle {
+  max-width: 840px;
+  margin: 24px auto 0;
+  font-size: 20px;
+  line-height: 1.8;
+  color: #475569;
+}
+
+.actions {
+  display: flex;
+  gap: 16px;
+  justify-content: center;
+  margin-top: 36px;
+  flex-wrap: wrap;
+}
+
+.heroStats {
+  max-width: 900px;
+  margin: 46px auto 0;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 14px;
+}
+
+.heroStat {
+  padding: 18px;
+  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.78);
+  border-radius: 18px;
+  box-shadow: 0 14px 38px rgba(15, 23, 42, 0.05);
+}
+
+.heroStat strong {
+  display: block;
+  font-size: 28px;
+  color: #0b1f3a;
+  letter-spacing: -0.04em;
+}
+
+.heroStat span {
+  color: #64748b;
+  font-size: 13px;
+}
+
+.entryGrid {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 24px 72px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 22px;
+}
+
+.entryCard {
+  display: block;
+  padding: 30px;
+  border-radius: 26px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 18px 48px rgba(15, 23, 42, 0.06);
+  text-decoration: none;
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+.entryCard:hover {
+  transform: translateY(-4px);
+  border-color: rgba(37, 99, 235, 0.36);
+  box-shadow: 0 24px 60px rgba(15, 23, 42, 0.1);
+  text-decoration: none;
+}
+
+.entryCard span {
+  display: inline-flex;
+  font-weight: 850;
+  color: #14b8d4;
+  margin-bottom: 20px;
+}
+
+.entryCard h2 {
+  color: #0b1f3a;
+  font-size: 24px;
+  margin-bottom: 12px;
+  letter-spacing: -0.035em;
+}
+
+.entryCard p {
+  color: #64748b;
+  line-height: 1.75;
+  margin: 0;
+}
+
+.section {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+}
+
+.sectionHeader {
+  margin-bottom: 28px;
+}
+
+.sectionHeader p {
+  color: #2563eb;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.sectionHeader h2 {
+  font-size: 42px;
+  color: #0b1f3a;
+  letter-spacing: -0.05em;
+  margin: 0;
+}
+
+.capabilityGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.capabilityCard {
+  padding: 26px;
+  border-radius: 24px;
+  border: 1px solid #e2e8f0;
+  background: #ffffff;
+}
+
+.capabilityCard h3 {
+  color: #0b1f3a;
+  font-size: 20px;
+  margin-bottom: 10px;
+  letter-spacing: -0.025em;
+}
+
+.capabilityCard p {
+  color: #64748b;
+  line-height: 1.75;
+  margin: 0;
+}
+
+.flow {
+  margin-top: 22px;
+  padding: 28px;
+  border-radius: 28px;
+  background: #0b1f3a;
+  color: #fff;
+  overflow-x: auto;
+}
+
+.flowTrack {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(128px, 1fr));
+  gap: 12px;
+  min-width: 760px;
+}
+
+.flowItem {
+  padding: 18px 14px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  text-align: center;
+}
+
+.flowItem strong {
+  display: block;
+  color: #fff;
+  margin-bottom: 4px;
+}
+
+.flowItem span {
+  color: rgba(255, 255, 255, 0.66);
+  font-size: 13px;
+}
+
+.cta {
+  max-width: 1120px;
+  margin: 0 auto 72px;
+  padding: 58px 32px;
+  border-radius: 34px;
+  background:
+    linear-gradient(135deg, rgba(11, 31, 58, 0.98), rgba(37, 99, 235, 0.92)),
+    radial-gradient(circle at top right, rgba(20, 184, 212, 0.44), transparent 18rem);
+  color: #ffffff;
+  text-align: center;
+}
+
+.cta h2 {
+  color: #ffffff;
+  font-size: 38px;
+  letter-spacing: -0.05em;
+}
+
+.cta p {
+  max-width: 780px;
+  margin: 16px auto 28px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+@media screen and (max-width: 996px) {
+  .entryGrid,
+  .capabilityGrid,
+  .heroStats {
+    grid-template-columns: 1fr;
+  }
+
+  .hero {
+    padding-top: 64px;
+  }
+}
+
+html[data-theme='dark'] .page {
+  background:
+    radial-gradient(circle at top left, rgba(20, 184, 212, 0.14), transparent 34rem),
+    linear-gradient(180deg, #06111f 0%, #081827 50%, #06111f 100%);
+}
+
+html[data-theme='dark'] .hero h1,
+html[data-theme='dark'] .entryCard h2,
+html[data-theme='dark'] .sectionHeader h2,
+html[data-theme='dark'] .capabilityCard h3,
+html[data-theme='dark'] .heroStat strong {
+  color: #f8fafc;
+}
+
+html[data-theme='dark'] .subtitle,
+html[data-theme='dark'] .entryCard p,
+html[data-theme='dark'] .capabilityCard p,
+html[data-theme='dark'] .heroStat span {
+  color: #94a3b8;
+}
+
+html[data-theme='dark'] .entryCard,
+html[data-theme='dark'] .capabilityCard,
+html[data-theme='dark'] .heroStat {
+  background: rgba(15, 23, 42, 0.72);
+  border-color: rgba(148, 163, 184, 0.2);
+}

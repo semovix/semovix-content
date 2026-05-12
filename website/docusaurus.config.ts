@@ -1,0 +1,178 @@
+import type {Config} from '@docusaurus/types';
+import type {Preset} from '@docusaurus/preset-classic';
+
+const config: Config = {
+  title: 'Semovix AI Agent 工程化指南',
+  tagline: '从模型调用到企业级智能执行平台',
+  favicon: 'img/favicon.svg',
+
+  url: 'https://docs.semovix.com',
+  baseUrl: '/',
+
+  organizationName: 'RhinoLink-Tech',
+  projectName: 'semovix-content',
+
+  onBrokenLinks: 'throw',
+  onBrokenMarkdownLinks: 'warn',
+ 
+  i18n: {
+    defaultLocale: 'zh-Hans',
+    locales: ['zh-Hans'],
+  },
+
+  markdown: {
+    format: 'detect',
+  },
+
+  presets: [
+    [
+      'classic',
+      {
+        docs: {
+          path: '../docs/ai-agent-engineering-guide',
+          routeBasePath: 'ai-agent-engineering-guide',
+          sidebarPath: './sidebars.ts',
+          editUrl:
+            'https://github.com/RhinoLink-Tech/semovix-content/tree/main/docs/ai-agent-engineering-guide/',
+          showLastUpdateTime: true,
+          showLastUpdateAuthor: true,
+        },
+        blog: {
+          showReadingTime: true,
+          routeBasePath: 'blog',
+          editUrl:
+            'https://github.com/RhinoLink-Tech/semovix-content/tree/main/website/blog/',
+          blogTitle: 'Semovix 技术博客',
+          blogDescription:
+            '企业级 AI Agent、语义治理、Skill、Harness 与 AI Workbench 工程化实践。',
+          postsPerPage: 9,
+        },
+        theme: {
+          customCss: './src/css/custom.css',
+        },
+      } satisfies Preset.Options,
+    ],
+  ],
+
+  themeConfig: {
+    image: 'img/social-cards/semovix-ai-agent-guide.svg',
+    metadata: [
+      {
+        name: 'keywords',
+        content:
+          'Semovix, Xino, AI Agent, Agent Engineering, Skill, Harness, MCP, AI Workbench, 语义治理, 找数问数, 企业级 Agent',
+      },
+    ],
+
+    colorMode: {
+      defaultMode: 'light',
+      disableSwitch: false,
+      respectPrefersColorScheme: true,
+    },
+
+    navbar: {
+      title: '',
+      logo: {
+        alt: 'Semovix Logo',
+        src: 'img/semovix/logo.svg',
+        srcDark: 'img/semovix/logo-dark.svg',
+      },
+      items: [
+        {
+          to: '/ai-agent-engineering-guide',
+          label: 'AI Agent 指南',
+          position: 'left',
+        },
+        {
+          to: '/blog',
+          label: '技术博客',
+          position: 'left',
+        },
+        {
+          to: '/semovix',
+          label: 'Semovix',
+          position: 'left',
+        },
+        {
+          to: '/xino',
+          label: 'Xino',
+          position: 'left',
+        },
+        {
+          href: 'https://github.com/RhinoLink-Tech/semovix-content',
+          label: 'GitHub',
+          position: 'right',
+        },
+      ],
+    },
+
+    footer: {
+      style: 'dark',
+      links: [
+        {
+          title: '学习',
+          items: [
+            {
+              label: 'AI Agent 工程化指南',
+              to: '/ai-agent-engineering-guide',
+            },
+            {
+              label: '技术博客',
+              to: '/blog',
+            },
+            {
+              label: '图解与信息图',
+              to: '/ai-agent-engineering-guide/09-diagrams',
+            },
+          ],
+        },
+        {
+          title: 'Semovix',
+          items: [
+            {
+              label: '产品介绍',
+              to: '/semovix',
+            },
+            {
+              label: 'Xino',
+              to: '/xino',
+            },
+            {
+              label: '语义治理',
+              to: '/ai-agent-engineering-guide/05-semovix-semantic-governance',
+            },
+          ],
+        },
+        {
+          title: '工程化',
+          items: [
+            {
+              label: 'Skill 系统',
+              to: '/ai-agent-engineering-guide/03-tool-skill-protocol/03-skill-concept',
+            },
+            {
+              label: 'Agent Harness',
+              to: '/ai-agent-engineering-guide/04-agent-runtime-engineering/04-agent-harness',
+            },
+            {
+              label: 'AI Workbench',
+              to: '/ai-agent-engineering-guide/06-ai-workbench-productization/01-ai-workbench',
+            },
+          ],
+        },
+      ],
+      copyright: `Copyright © ${new Date().getFullYear()} Semovix. Built for enterprise AI Agent engineering.`,
+    },
+
+    tableOfContents: {
+      minHeadingLevel: 2,
+      maxHeadingLevel: 4,
+    },
+
+    prism: {
+      additionalLanguages: ['bash', 'json', 'yaml', 'typescript', 'python', 'go', 'sql'],
+    },
+  } satisfies Preset.ThemeConfig,
+};
+
+export default config;

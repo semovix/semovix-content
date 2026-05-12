@@ -1,0 +1,14 @@
+# OS
+.DS_Store
+
+# Dependencies
+node_modules/
+
+# Docusaurus
+.docusaurus/
+build/
+
+# IDE
+.idea/
+.vscode/
+*.swp

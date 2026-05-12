@@ -1,0 +1,10 @@
+<svg width="1200" height="630" viewBox="0 0 1200 630" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="630" fill="#F6F8FB"/>
+  <circle cx="1020" cy="80" r="260" fill="#14B8D4" opacity="0.14"/>
+  <circle cx="160" cy="560" r="260" fill="#2563EB" opacity="0.12"/>
+  <rect x="80" y="80" width="1040" height="470" rx="42" fill="white" stroke="#E2E8F0"/>
+  <text x="120" y="180" font-family="Inter, Arial" font-size="34" font-weight="850" fill="#2563EB">Semovix AI Agent Engineering Guide</text>
+  <text x="120" y="280" font-family="Inter, Arial" font-size="70" font-weight="900" fill="#0B1F3A">从模型调用到</text>
+  <text x="120" y="370" font-family="Inter, Arial" font-size="70" font-weight="900" fill="#0B1F3A">企业级智能执行平台</text>
+  <text x="120" y="455" font-family="Inter, Arial" font-size="30" font-weight="650" fill="#64748B">Context · Tool · Skill · Harness · MCP · AI Workbench</text>
+</svg>
