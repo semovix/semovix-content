@@ -6,7 +6,7 @@ const config: Config = {
   tagline: '从模型调用到企业级智能执行平台',
   favicon: 'img/favicon.svg',
 
-  url: 'https://docs.semovix.com',
+  url: 'https://doc.semovix.com',
   baseUrl: '/',
 
   organizationName: 'semovix',
