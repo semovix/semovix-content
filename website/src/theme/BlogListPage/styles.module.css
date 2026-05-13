@@ -67,8 +67,8 @@
   max-width: 900px;
   margin: 1rem 0 0.85rem;
   color: var(--blog-navy);
-  font-size: clamp(2.5rem, 5vw, 4.7rem);
-  line-height: 1.03;
+  font-size: clamp(1.8rem, 3.5vw, 3rem);
+  line-height: 1.06;
   letter-spacing: -0.06em;
 }
 
@@ -80,7 +80,7 @@
   max-width: 760px;
   margin: 0;
   color: var(--blog-muted);
-  font-size: clamp(1rem, 1.6vw, 1.18rem);
+  font-size: clamp(0.9rem, 1.3vw, 1.02rem);
   line-height: 1.9;
 }
 
@@ -193,7 +193,7 @@
 .crossContentCta h2 {
   margin: 0.85rem 0 0;
   color: var(--blog-navy);
-  font-size: clamp(1.8rem, 3vw, 2.55rem);
+  font-size: clamp(1.35rem, 2.2vw, 1.9rem);
   line-height: 1.15;
   letter-spacing: -0.045em;
 }
@@ -246,7 +246,7 @@
 .topicCard h3 {
   margin: 1rem 0 0.65rem;
   color: var(--blog-navy);
-  font-size: 1.35rem;
+  font-size: 1.1rem;
   line-height: 1.25;
   letter-spacing: -0.03em;
 }
@@ -390,7 +390,7 @@
 .postsList :global(article h2),
 .postsList :global(article h1) {
   color: var(--blog-navy);
-  font-size: clamp(1.55rem, 2.5vw, 2.15rem);
+  font-size: clamp(1.15rem, 1.8vw, 1.55rem);
   line-height: 1.22;
   letter-spacing: -0.04em;
 }
@@ -456,7 +456,7 @@
   }
 
   .hero h1 {
-    font-size: clamp(2.3rem, 11vw, 3.5rem);
+    font-size: clamp(1.6rem, 8vw, 2.4rem);
   }
 
   .sectionHeading,
