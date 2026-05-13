@@ -1,0 +1,49 @@
+agent-engineering:
+  label: AI Agent 工程化
+  permalink: /agent-engineering
+  description: 围绕 Agent 架构、任务拆解、执行闭环、可靠性与企业级落地的工程实践文章。
+
+agent-foundation:
+  label: Agent 基础认知
+  permalink: /agent-foundation
+  description: 解释 AI Agent 的能力边界、核心概念与与传统聊天机器人的本质差异。
+
+context-engineering:
+  label: Context Engineering
+  permalink: /context-engineering
+  description: 聚焦上下文组织、记忆、RAG、任务背景注入与长链路任务中的信息治理。
+
+tool-calling:
+  label: Tool Calling
+  permalink: /tool-calling
+  description: 探讨模型如何调用工具、接口设计、参数约束、错误恢复与执行结果呈现。
+
+skill-system:
+  label: Skill 系统
+  permalink: /skill-system
+  description: 围绕 Skill 的能力封装、组织经验沉淀、任务复用与智能执行编排。
+
+mcp-integration:
+  label: MCP 与集成
+  permalink: /mcp-integration
+  description: 讨论 MCP、工具协议、第三方系统连接与企业级集成层设计。
+
+harness-runtime:
+  label: Harness 与 Runtime
+  permalink: /harness-runtime
+  description: 聚焦 Agent Runtime、Harness、状态管理、可回放、可恢复与执行调度。
+
+semantic-governance:
+  label: 语义治理
+  permalink: /semantic-governance
+  description: Semovix 核心方向，涵盖语义层、业务指标、资产治理、找数问数与企业数据理解。
+
+ai-workbench:
+  label: AI Workbench
+  permalink: /ai-workbench
+  description: 讨论工作台交互、任务草稿、执行页 Block、Human-in-the-loop 与产品化体验。
+
+verification-audit:
+  label: 验证、审计与可控性
+  permalink: /verification-audit
+  description: 聚焦结果验证、权限检查、审计回放、过程透明与企业级可信执行机制。

@@ -9,12 +9,12 @@ const config: Config = {
   url: 'https://docs.semovix.com',
   baseUrl: '/',
 
-  organizationName: 'RhinoLink-Tech',
+  organizationName: 'semovix',
   projectName: 'semovix-content',
 
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
- 
+
   i18n: {
     defaultLocale: 'zh-Hans',
     locales: ['zh-Hans'],
@@ -33,7 +33,7 @@ const config: Config = {
           routeBasePath: 'ai-agent-engineering-guide',
           sidebarPath: './sidebars.ts',
           editUrl:
-            'https://github.com/RhinoLink-Tech/semovix-content/tree/main/docs/ai-agent-engineering-guide/',
+            'https://github.com/semovix/semovix-content/tree/main/docs/ai-agent-engineering-guide/',
           showLastUpdateTime: true,
           showLastUpdateAuthor: true,
         },
@@ -41,11 +41,22 @@ const config: Config = {
           showReadingTime: true,
           routeBasePath: 'blog',
           editUrl:
-            'https://github.com/RhinoLink-Tech/semovix-content/tree/main/website/blog/',
+            'https://github.com/semovix/semovix-content/tree/main/website/blog/',
           blogTitle: 'Semovix 技术博客',
           blogDescription:
             '企业级 AI Agent、语义治理、Skill、Harness 与 AI Workbench 工程化实践。',
           postsPerPage: 9,
+          blogSidebarCount: 0,
+          blogSidebarTitle: '最新文章',
+
+  // 标签专题页
+  tags: 'tags.yml',
+
+  // 迁移阶段建议先 warn，全部文章标准化后改为 throw
+  onInlineTags: 'warn',
+
+  // 可按需要调整；当前保留 warn，提醒博客列表摘要需要 truncate
+  onUntruncatedBlogPosts: 'warn',
         },
         theme: {
           customCss: './src/css/custom.css',
@@ -70,6 +81,13 @@ const config: Config = {
       respectPrefersColorScheme: true,
     },
 
+    docs: {
+      sidebar: {
+        hideable: true,
+        autoCollapseCategories: true,
+      },
+    },
+
     navbar: {
       title: '',
       logo: {
@@ -78,6 +96,11 @@ const config: Config = {
         srcDark: 'img/semovix/logo-dark.svg',
       },
       items: [
+        {
+          to: '/',
+          label: '首页',
+          position: 'left',
+        },
         {
           to: '/ai-agent-engineering-guide',
           label: 'AI Agent 指南',
@@ -99,7 +122,7 @@ const config: Config = {
           position: 'left',
         },
         {
-          href: 'https://github.com/RhinoLink-Tech/semovix-content',
+          href: 'https://github.com/semovix/semovix-content',
           label: 'GitHub',
           position: 'right',
         },
