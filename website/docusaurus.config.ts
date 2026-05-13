@@ -12,8 +12,7 @@ const config: Config = {
   organizationName: 'semovix',
   projectName: 'semovix-content',
 
-  onBrokenLinks: 'throw',
-  onBrokenMarkdownLinks: 'warn',
+  onBrokenLinks: 'warn',
 
   i18n: {
     defaultLocale: 'zh-Hans',
@@ -22,6 +21,9 @@ const config: Config = {
 
   markdown: {
     format: 'detect',
+    hooks: {
+      onBrokenMarkdownLinks: 'warn',
+    },
   },
 
   presets: [

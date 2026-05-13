@@ -1,4 +1,3 @@
-\
 /**
  * Semovix custom blog tag posts page
  * Target: Docusaurus v3.x

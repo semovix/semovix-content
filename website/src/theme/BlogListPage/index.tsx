@@ -322,23 +322,6 @@ function BlogListPageContent({metadata, items}: Props): ReactNode {
     </Layout>
   );
 }
-function BlogListPageMetadata(props: Props): ReactNode {
-  const {metadata} = props;
-  const {
-    siteConfig: {title: siteTitle},
-  } = useDocusaurusContext();
-  const {blogDescription, blogTitle, permalink} = metadata;
-  const isBlogOnlyMode = permalink === '/';
-  const title = isBlogOnlyMode ? siteTitle : blogTitle;
-
-  return (
-    <>
-      <PageMetadata title={title} description={blogDescription} />
-      <SearchMetadata tag="blog_posts_list" />
-    </>
-  );
-}
-
 function TopicCardItem({topic}: {topic: TopicCard}): ReactNode {
   return (
     <Link className={styles.topicCard} to={topic.href}>
