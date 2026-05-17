@@ -7,6 +7,7 @@ import React, {type ReactNode} from 'react';
 import clsx from 'clsx';
 import Link from '@docusaurus/Link';
 import useDocusaurusContext from '@docusaurus/useDocusaurusContext';
+import {useLocation} from '@docusaurus/router';
 import {
   PageMetadata,
   HtmlClassNameProvider,
@@ -110,6 +111,21 @@ function BlogListPageContent({metadata, items}: Props): ReactNode {
   const featuredAuthor = firstPost?.metadata.authors?.[0]?.name || '陈思远';
   const featuredAuthorAvatar = featuredAuthor.substring(0, 1);
 
+  const location = useLocation();
+  const currentPath = location.pathname.replace(/\/$/, '');
+
+  const isAllActive = currentPath === '/blog' || /^\/blog\/page\/\d+/.test(currentPath) || currentPath === '/blog/';
+  const isReactActive = currentPath.includes('/blog/tags/react');
+  const isToolCallingActive = currentPath.includes('/blog/tags/tool-calling');
+  const isRagActive = currentPath.includes('/blog/tags/rag');
+  const isMultiAgentActive = currentPath.includes('/blog/tags/multi-agent');
+  const isLanggraphActive = currentPath.includes('/blog/tags/langgraph');
+  const isPromptActive = currentPath.includes('/blog/tags/prompt-engineering');
+  const isMcpActive = currentPath.includes('/blog/tags/mcp');
+  const isProdActive = currentPath.includes('/blog/tags/production-deployment');
+  const isSemanticActive = currentPath.includes('/blog/tags/semantic-governance');
+  const isWorkbenchActive = currentPath.includes('/blog/tags/ai-workbench');
+
   return (
     <Layout>
       <main className={styles.page}>
@@ -174,17 +190,17 @@ function BlogListPageContent({metadata, items}: Props): ReactNode {
             <div className={styles.searchLabel}>// 关键词导航</div>
             <div className={styles.keywordRow}>
               <span className={styles.kwLabel}>热门专题：</span>
-              <Link to="/blog" className={clsx(styles.kwChip, styles.active)}>全部</Link>
-              <Link to="/blog/tags/react" className={styles.kwChip}>ReAct</Link>
-              <Link to="/blog/tags/tool-calling" className={clsx(styles.kwChip, styles.cTeal)}>Function Calling</Link>
-              <Link to="/blog/tags/rag" className={clsx(styles.kwChip, styles.cSky)}>RAG</Link>
-              <Link to="/blog/tags/multi-agent" className={clsx(styles.kwChip, styles.cAmber)}>多 Agent</Link>
-              <Link to="/blog/tags/langgraph" className={clsx(styles.kwChip, styles.cAmber)}>LangGraph</Link>
-              <Link to="/blog/tags/prompt-engineering" className={clsx(styles.kwChip, styles.cRose)}>Prompt 工程</Link>
-              <Link to="/blog/tags/mcp" className={clsx(styles.kwChip, styles.cViolet)}>MCP</Link>
-              <Link to="/blog/tags/production-deployment" className={styles.kwChip}>生产部署</Link>
-              <Link to="/blog/tags/semantic-governance" className={clsx(styles.kwChip, styles.cTeal)}>语义治理</Link>
-              <Link to="/blog/tags/ai-workbench" className={clsx(styles.kwChip, styles.cViolet)}>AI Workbench</Link>
+              <Link to="/blog" className={clsx(styles.kwChip, isAllActive && styles.active)}>全部</Link>
+              <Link to="/blog/tags/react" className={clsx(styles.kwChip, isReactActive && styles.active)}>ReAct</Link>
+              <Link to="/blog/tags/tool-calling" className={clsx(styles.kwChip, styles.cTeal, isToolCallingActive && styles.active)}>Function Calling</Link>
+              <Link to="/blog/tags/rag" className={clsx(styles.kwChip, styles.cSky, isRagActive && styles.active)}>RAG</Link>
+              <Link to="/blog/tags/multi-agent" className={clsx(styles.kwChip, styles.cAmber, isMultiAgentActive && styles.active)}>多 Agent</Link>
+              <Link to="/blog/tags/langgraph" className={clsx(styles.kwChip, styles.cAmber, isLanggraphActive && styles.active)}>LangGraph</Link>
+              <Link to="/blog/tags/prompt-engineering" className={clsx(styles.kwChip, styles.cRose, isPromptActive && styles.active)}>Prompt 工程</Link>
+              <Link to="/blog/tags/mcp" className={clsx(styles.kwChip, styles.cViolet, isMcpActive && styles.active)}>MCP</Link>
+              <Link to="/blog/tags/production-deployment" className={clsx(styles.kwChip, isProdActive && styles.active)}>生产部署</Link>
+              <Link to="/blog/tags/semantic-governance" className={clsx(styles.kwChip, styles.cTeal, isSemanticActive && styles.active)}>语义治理</Link>
+              <Link to="/blog/tags/ai-workbench" className={clsx(styles.kwChip, styles.cViolet, isWorkbenchActive && styles.active)}>AI Workbench</Link>
             </div>
           </div>
         </section>

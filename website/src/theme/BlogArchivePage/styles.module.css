@@ -1271,3 +1271,25 @@
     padding: 16px;
   }
 }
+
+/* ════════════════════════════════
+   ARCHIVE CUSTOM LIST HOVER EFFECTS
+   ════════════════════════════════ */
+.archiveRow {
+  transition: background-color 0.2s ease, transform 0.2s ease;
+}
+.archiveRow:hover {
+  background-color: var(--void3) !important;
+  transform: translateX(4px);
+}
+.archiveLink {
+  transition: color 0.2s ease;
+}
+.archiveRow:hover .archiveLink {
+  color: var(--lime) !important;
+}
+
+:global(html[data-theme='light']) .archiveRow:hover {
+  background-color: var(--void3) !important;
+}
+

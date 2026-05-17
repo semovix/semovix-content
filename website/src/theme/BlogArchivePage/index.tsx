@@ -1,10 +1,9 @@
 /**
- * Semovix custom blog tag posts page for Docusaurus v3.x
+ * Semovix custom blog archive page
  * Cyberpunk void-black and high-contrast light mode design matching BlogListPage
  */
 import React, {type ReactNode} from 'react';
 import clsx from 'clsx';
-import Translate from '@docusaurus/Translate';
 import Link from '@docusaurus/Link';
 import {useLocation} from '@docusaurus/router';
 import {
@@ -12,30 +11,13 @@ import {
   HtmlClassNameProvider,
   ThemeClassNames,
 } from '@docusaurus/theme-common';
-import {useBlogTagsPostsPageTitle} from '@docusaurus/theme-common/internal';
 import Layout from '@theme/Layout';
-import BlogListPaginator from '@theme/BlogListPaginator';
+import type {Props} from '@theme/BlogArchivePage';
 import SearchMetadata from '@theme/SearchMetadata';
-import type {Props} from '@theme/BlogTagsPostsPage';
-import BlogPostItems from '@theme/BlogPostItems';
-import Unlisted from '@theme/ContentVisibility/Unlisted';
 import styles from './styles.module.css';
 
-export default function BlogTagsPostsPage(props: Props): ReactNode {
-  const {tag, items, listMetadata} = props;
-  const title = useBlogTagsPostsPageTitle(tag);
-
-  // Extract dynamic featured card from the latest post of this tag
-  const firstPost = items[0]?.content;
-  const featuredTitle = firstPost?.metadata.title || 'LangGraph 状态机 vs 传统 ReAct：生产环境下谁更稳？';
-  const featuredDesc = firstPost?.metadata.description || '我们用同一个复杂任务基准测试了两种架构，结果出乎意料——在超过 12 步的任务中，状态机架构的成功率高出 34%……';
-  const featuredLink = firstPost?.metadata.permalink || '#';
-  const featuredDate = firstPost?.metadata.formattedDate || '2026-05-17';
-  const featuredReadingTime = firstPost?.metadata.readingTime 
-    ? `⏱ ${Math.ceil(firstPost.metadata.readingTime)} min` 
-    : '⏱ 18 min';
-  const featuredAuthor = firstPost?.metadata.authors?.[0]?.name || '陈思远';
-  const featuredAuthorAvatar = featuredAuthor.substring(0, 1);
+export default function BlogArchivePage({archive}: Props): ReactNode {
+  const title = "归档 // ARCHIVES";
 
   const location = useLocation();
   const currentPath = location.pathname.replace(/\/$/, '');
@@ -52,20 +34,33 @@ export default function BlogTagsPostsPage(props: Props): ReactNode {
   const isSemanticActive = currentPath.includes('/blog/tags/semantic-governance');
   const isWorkbenchActive = currentPath.includes('/blog/tags/ai-workbench');
 
+  // Group posts by year
+  const postsByYear = archive.blogPosts.reduce((acc, post) => {
+    const dateStr = post.metadata.date;
+    const year = new Date(dateStr).getFullYear().toString();
+    if (!acc[year]) {
+      acc[year] = [];
+    }
+    acc[year].push(post);
+    return acc;
+  }, {} as Record<string, typeof archive.blogPosts>);
+
+  // Sort years in descending order
+  const years = Object.keys(postsByYear).sort((a, b) => b.localeCompare(a));
+
   return (
     <HtmlClassNameProvider
       className={clsx(
         ThemeClassNames.wrapper.blogPages,
-        ThemeClassNames.page.blogTagPostListPage,
-        styles.blogListPageRoot, // Enable the global conjoined theme overrides
+        ThemeClassNames.page.blogArchivePage,
+        styles.blogListPageRoot, // Enable global conjoined theme overrides
       )}>
-      <PageMetadata title={title} description={tag.description} />
-      <SearchMetadata tag="blog_tags_posts" />
+      <PageMetadata title={title} description="Semovix 技术博客全量文章归档，系统化追踪 AI Agent 架构演进与工程实践" />
+      <SearchMetadata tag="blog_archive" />
       
       <Layout>
         <main className={styles.page}>
-          {tag.unlisted && <Unlisted />}
-
+          
           {/* ═══ HERO ═══ */}
           <section className={styles.hero}>
             <div className={styles.heroOrb} />
@@ -73,46 +68,38 @@ export default function BlogTagsPostsPage(props: Props): ReactNode {
               <div className={styles.heroLeft}>
                 <div className={styles.heroEyebrow}>
                   <div className={styles.pulse} />
-                  <span>专题学习系列 · {tag.label.toUpperCase()} · 2026</span>
+                  <span>历史沉淀库 · ARCHIVES · 2026</span>
                 </div>
-                <h1 className={styles.heroTitle} style={{fontSize: 'clamp(3rem, 6vw, 5.5rem)'}}>
-                  TOPIC<br/>
-                  <span className={styles.line2} style={{fontSize: '0.9em'}}>{tag.label.toUpperCase()}</span>
+                <h1 className={styles.heroTitle}>
+                  INSIGHTS<br/>
+                  <span className={styles.line2}>ARCHIVE</span>
                 </h1>
                 <p className={styles.heroDesc}>
-                  {tag.description || `关于 ${tag.label} 的深度技术沉淀与企业级工程指南。本专题聚焦最佳实践与前沿演进，为您提供成体系的高质量技术文章。`}
+                  这里沉淀了 Semovix 团队成立至今撰写的所有硬核技术文章。在这里，您可以跨越时间轴，系统化追踪从 ReAct 初步落地到 MCP 协议标准演进的完整工程脉络。
                 </p>
                 <div className={styles.heroStats}>
                   <div className={styles.heroStat}>
-                    <span className={styles.num}>{items.length}</span>
-                    <span className={styles.label}>// 篇技术文章</span>
+                    <span className={styles.num}>{archive.blogPosts.length}</span>
+                    <span className={styles.label}>// 全量沉淀篇数</span>
                   </div>
                   <div className={styles.heroStat}>
-                    <span className={styles.num}>ACTIVE</span>
-                    <span className={styles.label}>// 专题状态</span>
+                    <span className={styles.num}>CHRONO</span>
+                    <span className={styles.label}>// 排序方式</span>
                   </div>
                 </div>
               </div>
 
-              {/* Featured Post Card under this Tag */}
-              <Link to={featuredLink} className={styles.heroFeatured}>
-                <div className={styles.heroFeaturedTop} />
-                <div className={styles.heroFeaturedBody}>
-                  <div className={styles.featuredBadge}>⚡ 最新发布</div>
-                  <h2>{featuredTitle}</h2>
-                  <p>{featuredDesc}</p>
-                  <div className={styles.heroFeaturedMeta}>
-                    <div className={styles.authorChip}>
-                      <div className={styles.authorAvatar}>{featuredAuthorAvatar}</div>
-                      <div className={styles.authorInfo}>
-                        <div className={styles.name}>{featuredAuthor}</div>
-                        <div className={styles.date}>{featuredDate} · {featuredReadingTime}</div>
-                      </div>
-                    </div>
-                    <button className={styles.readBtn}>READ →</button>
-                  </div>
-                </div>
-              </Link>
+              {/* Thematic Visual Box on the Right */}
+              <div className={styles.heroFeatured} style={{background: 'var(--void3)', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '32px', border: '1px solid var(--border)'}}>
+                <div className={styles.featuredBadge}>⚡ 快捷检索</div>
+                <h2 style={{fontSize: '24px', color: 'var(--text)', margin: '12px 0'}}>寻找特定主题的文章？</h2>
+                <p style={{fontSize: '13px', color: 'var(--text2)', lineHeight: '1.6'}}>
+                  您可以通过点击下方的关键词导航，快速筛选属于相应专题的文章合集；也可以在顶部搜索框输入您感兴趣的关键字进行全站即时检索。
+                </p>
+                <Link to="/blog" className={styles.readBtn} style={{width: 'fit-content', marginTop: '16px', background: 'var(--lime-dim)', border: '1px solid var(--lime)', color: 'var(--lime)', padding: '6px 16px', borderRadius: '999px', fontSize: '12px', fontWeight: 'bold'}}>
+                  返回博客首页 →
+                </Link>
+              </div>
             </div>
           </section>
 
@@ -142,20 +129,86 @@ export default function BlogTagsPostsPage(props: Props): ReactNode {
             
             {/* Main content column */}
             <div className={styles.mainContentColumn}>
-              <section className={styles.articlesSection} id="articles">
+              <section className={styles.articlesSection}>
                 <div className={styles.sectionHead}>
-                  <h2>TOPIC PUBLICATIONS</h2>
-                  <span className={styles.secCount}>// “{tag.label}” 专题文章</span>
-                  <Link to="/blog/archive" className={styles.viewAll}>VIEW ALL ARCHIVES →</Link>
+                  <h2>CHRONOLOGICAL PUBLICATIONS</h2>
+                  <span className={styles.secCount}>// 时间归档时间线</span>
                 </div>
 
-                <div className={styles.postsPanel}>
-                  <div className={styles.postsList}>
-                    <BlogPostItems items={items} />
-                  </div>
-                  <div className={styles.paginationWrap}>
-                    <BlogListPaginator metadata={listMetadata} />
-                  </div>
+                <div className={styles.postsPanel} style={{padding: '40px 32px', background: 'var(--surface)', border: '1px solid var(--border)', borderRadius: '24px'}}>
+                  
+                  {years.map((year) => (
+                    <div key={year} style={{marginBottom: '48px'}}>
+                      {/* Year Node Header */}
+                      <div style={{display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '24px'}}>
+                        <h2 style={{fontFamily: 'var(--bebas)', fontSize: '48px', color: 'var(--lime)', letterSpacing: '0.05em', margin: 0, textShadow: 'var(--lime-glow)'}}>{year}</h2>
+                        <div style={{flex: 1, height: '1px', background: 'linear-gradient(to right, var(--lime), transparent)'}} />
+                        <span style={{fontFamily: 'var(--mono)', fontSize: '12px', color: 'var(--text3)'}}>{postsByYear[year].length} 篇文章</span>
+                      </div>
+
+                      {/* Year's post list */}
+                      <div style={{display: 'flex', flexDirection: 'column', gap: '4px'}}>
+                        {postsByYear[year].map((post) => {
+                          const dateObj = new Date(post.metadata.date);
+                          const mm = String(dateObj.getMonth() + 1).padStart(2, '0');
+                          const dd = String(dateObj.getDate()).padStart(2, '0');
+                          const tagLabel = post.metadata.tags?.[0]?.label || '';
+
+                          return (
+                            <div 
+                              key={post.metadata.permalink}
+                              style={{
+                                display: 'flex',
+                                alignItems: 'baseline',
+                                gap: '16px',
+                                padding: '14px 12px',
+                                borderBottom: '1px solid var(--border)',
+                                transition: 'all 0.2s',
+                                borderRadius: '8px',
+                              }}
+                              className={styles.archiveRow}
+                            >
+                              {/* Date */}
+                              <span style={{fontFamily: 'var(--mono)', fontSize: '13px', color: 'var(--text3)', minWidth: '45px'}}>{mm}.{dd}</span>
+                              
+                              {/* Tag Label if available */}
+                              {tagLabel && (
+                                <span style={{
+                                  fontFamily: 'var(--mono)', 
+                                  fontSize: '10px', 
+                                  color: 'var(--lime)', 
+                                  background: 'var(--lime-dim)', 
+                                  border: '1px solid var(--lime)', 
+                                  padding: '2px 8px', 
+                                  borderRadius: '999px',
+                                  textTransform: 'uppercase'
+                                }}>
+                                  {tagLabel}
+                                </span>
+                              )}
+
+                              {/* Title */}
+                              <Link 
+                                to={post.metadata.permalink}
+                                style={{
+                                  fontFamily: 'var(--serif)',
+                                  fontSize: '16px',
+                                  fontWeight: 500,
+                                  color: 'var(--text)',
+                                  textDecoration: 'none',
+                                  transition: 'all 0.2s',
+                                }}
+                                className={styles.archiveLink}
+                              >
+                                {post.metadata.title}
+                              </Link>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  ))}
+
                 </div>
               </section>
             </div>
@@ -245,7 +298,7 @@ export default function BlogTagsPostsPage(props: Props): ReactNode {
                 <p>每周一期，深度拆解全球最前沿 the AI Agent 工程实践与落地架构生态。</p>
                 <input type="text" placeholder="输入您的电子邮箱地址..." className={styles.nlInput} />
                 <button className={styles.nlBtn}>订阅周刊</button>
-                <div className={styles.nlNote}>* 随时退订 · 无任何广告垃圾邮件</div>
+                <div className={styles.nlNote}>* 随时退订 · 无 any 广告垃圾邮件</div>
               </div>
 
               {/* About Card */}
