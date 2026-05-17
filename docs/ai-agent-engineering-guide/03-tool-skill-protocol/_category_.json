@@ -3,6 +3,7 @@
   "position": 4,
   "link": {
     "type": "generated-index",
+    "slug": "tool-skill-protocol",
     "description": "解释 Agent 如何从回答走向行动，并通过 Skill 和协议实现能力复用与外部连接。"
   }
 }

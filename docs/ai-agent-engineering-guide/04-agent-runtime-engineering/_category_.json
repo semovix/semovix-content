@@ -3,6 +3,7 @@
   "position": 5,
   "link": {
     "type": "generated-index",
+    "slug": "agent-runtime-engineering",
     "description": "解释生产级 Agent 的受控闭环、任务引擎、运行时、状态恢复与可观测性。"
   }
 }

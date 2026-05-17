@@ -1,0 +1,256 @@
+/* ── Category Generated Index: warm book-style card-grid ── */
+
+.categoryPage {
+  max-width: 100%;
+  padding: 0 1.5rem;
+}
+
+/* ── Hero ── */
+
+.hero {
+  text-align: center;
+  padding: 40px 0 36px;
+}
+
+.heroBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(200, 119, 58, 0.08);
+  border: 1px solid rgba(200, 119, 58, 0.20);
+  border-radius: 3px;
+  padding: 4px 12px;
+  font-size: 0.74rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--semovix-accent);
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+:global(html[data-theme='dark']) .heroBadge {
+  color: #e09b66;
+  background: rgba(200, 119, 58, 0.10);
+  border-color: rgba(200, 119, 58, 0.25);
+}
+
+.heroDot {
+  width: 6px;
+  height: 6px;
+  background: var(--semovix-accent);
+  border-radius: 50%;
+}
+
+.hero h1 {
+  font-family: 'Lora', 'Noto Serif SC', serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--semovix-ink);
+  margin-bottom: 12px;
+}
+
+:global(html[data-theme='dark']) .hero h1 {
+  background: linear-gradient(135deg, #f0ede8 0%, #e09b66 60%, #c8773a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.heroDescription {
+  font-size: 0.95rem;
+  color: var(--semovix-ink3);
+  max-width: 640px;
+  margin: 0 auto;
+  line-height: 1.75;
+}
+
+:global(html[data-theme='dark']) .heroDescription {
+  color: #8a8578;
+}
+
+.divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--semovix-rule), transparent);
+  margin: 0 auto 40px;
+  max-width: 600px;
+}
+
+/* ── Cards Grid ── */
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--semovix-card);
+  border: 1px solid var(--semovix-border);
+  border-radius: 8px;
+  padding: 24px;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+  cursor: pointer;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  animation: fadeUp 0.5s ease both;
+}
+
+:global(html[data-theme='dark']) .card {
+  background: var(--semovix-card);
+  border-color: var(--semovix-border);
+  color: #d4cfc6;
+}
+
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 8px 8px 0 0;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.card:hover {
+  border-color: rgba(200, 119, 58, 0.30);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+:global(html[data-theme='dark']) .card:hover {
+  border-color: rgba(200, 119, 58, 0.25);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.card:hover::before {
+  opacity: 1;
+}
+
+/* Color variants — top bar on hover */
+.card.c1::before { background: #4f80ff; }
+.card.c2::before { background: #00b48c; }
+.card.c3::before { background: #a78bfa; }
+.card.c4::before { background: #c8773a; }
+
+/* Card index badge */
+.cardIndex {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-bottom: 14px;
+  flex-shrink: 0;
+}
+
+.card.c1 .cardIndex { background: rgba(79, 128, 255, 0.10); color: #4f80ff; }
+.card.c2 .cardIndex { background: rgba(0, 180, 140, 0.10); color: #009b6e; }
+.card.c3 .cardIndex { background: rgba(167, 139, 250, 0.10); color: #8b5cf6; }
+.card.c4 .cardIndex { background: rgba(200, 119, 58, 0.10); color: #c8773a; }
+
+:global(html[data-theme='dark']) .card.c1 .cardIndex { background: rgba(79, 128, 255, 0.15); color: #6b9eff; }
+:global(html[data-theme='dark']) .card.c2 .cardIndex { background: rgba(0, 180, 140, 0.12); color: #00b48c; }
+:global(html[data-theme='dark']) .card.c3 .cardIndex { background: rgba(167, 139, 250, 0.12); color: #a78bfa; }
+:global(html[data-theme='dark']) .card.c4 .cardIndex { background: rgba(200, 119, 58, 0.12); color: #e09b66; }
+
+.card h3 {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--semovix-ink);
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+:global(html[data-theme='dark']) .card h3 {
+  color: #f0ede8;
+}
+
+.cardDescription {
+  font-size: 0.85rem;
+  color: var(--semovix-ink3);
+  line-height: 1.65;
+  margin: 0 0 18px;
+  flex: 1;
+}
+
+:global(html[data-theme='dark']) .cardDescription {
+  color: #8a8578;
+}
+
+/* ── Card Footer ── */
+
+.cardFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 14px;
+  border-top: 1px solid var(--semovix-rule);
+  margin-top: auto;
+}
+
+:global(html[data-theme='dark']) .cardFooter {
+  border-top-color: var(--semovix-border);
+}
+
+.cardReadMore {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--semovix-ink4);
+}
+
+:global(html[data-theme='dark']) .cardReadMore {
+  color: #6b6050;
+}
+
+.cardArrow {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--semovix-accent);
+  transition: transform 0.2s;
+}
+
+:global(html[data-theme='dark']) .cardArrow {
+  color: #e09b66;
+}
+
+.card:hover .cardArrow {
+  transform: translateX(3px);
+}
+
+/* ── Animations ── */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card { animation: none; }
+}
+
+/* ── Responsive ── */
+
+@media (max-width: 768px) {
+  .hero {
+    padding: 20px 0 18px;
+  }
+
+  .cards {
+    grid-template-columns: 1fr;
+  }
+
+  .hero h1 {
+    font-size: clamp(1.3rem, 6vw, 1.8rem);
+  }
+}

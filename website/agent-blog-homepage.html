@@ -1,0 +1,1808 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGENT.DEV — AI Agent 技术博客</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300&family=Noto+Serif+SC:wght@400;700;900&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+
+/* ════════════════════════════════
+   TOKENS
+════════════════════════════════ */
+:root {
+  --void: #060608;
+  --void2: #0c0d12;
+  --void3: #111318;
+  --surface: #16181f;
+  --surface2: #1c1e27;
+  --surface3: #222530;
+  --border: rgba(255,255,255,0.06);
+  --border2: rgba(255,255,255,0.12);
+  --lime: #b8f53c;
+  --lime2: #cff866;
+  --lime-dim: rgba(184,245,60,0.12);
+  --lime-glow: 0 0 40px rgba(184,245,60,0.15);
+  --amber: #f5a623;
+  --amber-dim: rgba(245,166,35,0.1);
+  --sky: #38b2f0;
+  --sky-dim: rgba(56,178,240,0.1);
+  --rose: #f04e6e;
+  --rose-dim: rgba(240,78,110,0.1);
+  --violet: #9b6dff;
+  --violet-dim: rgba(155,109,255,0.1);
+  --text: #e8eaf2;
+  --text2: #9298b0;
+  --text3: #555d78;
+  --text4: #353c52;
+  --display: 'Bebas Neue', sans-serif;
+  --serif: 'Noto Serif SC', serif;
+  --mono: 'DM Mono', monospace;
+  --sans: 'Space Grotesk', sans-serif;
+}
+
+*{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+
+body {
+  font-family: var(--sans);
+  background: var(--void);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Noise grain overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.4;
+}
+
+/* ════════════════════════════════
+   HEADER / NAV
+════════════════════════════════ */
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  background: rgba(6,6,8,0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid var(--border);
+  padding: 0 48px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+}
+
+.logo-mark {
+  width: 32px; height: 32px;
+  background: var(--lime);
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--void);
+  letter-spacing: -0.05em;
+}
+
+.logo-text {
+  font-family: var(--display);
+  font-size: 22px;
+  letter-spacing: 0.1em;
+  color: var(--text);
+}
+
+.logo-text span { color: var(--lime); }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.nav-links a {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text3);
+  text-decoration: none;
+  letter-spacing: 0.05em;
+  transition: color 0.2s;
+}
+
+.nav-links a:hover { color: var(--text); }
+.nav-links a.active { color: var(--lime); }
+
+.nav-cta {
+  background: var(--lime);
+  color: var(--void) !important;
+  padding: 7px 18px;
+  border-radius: 6px;
+  font-weight: 600 !important;
+  font-size: 13px !important;
+  letter-spacing: 0.02em !important;
+  transition: background 0.2s, transform 0.15s !important;
+}
+
+.nav-cta:hover { background: var(--lime2) !important; transform: translateY(-1px); }
+
+/* ════════════════════════════════
+   HERO
+════════════════════════════════ */
+.hero {
+  position: relative;
+  padding: 80px 48px 60px;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+}
+
+/* Decorative grid lines */
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(184,245,60,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(184,245,60,0.03) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+/* Large glowing orb */
+.hero-orb {
+  position: absolute;
+  top: -120px; right: -80px;
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, rgba(184,245,60,0.07) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-inner {
+  position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 60px;
+  align-items: center;
+}
+
+.hero-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+
+.hero-eyebrow .pulse {
+  width: 8px; height: 8px;
+  background: var(--lime);
+  border-radius: 50%;
+  box-shadow: 0 0 0 0 rgba(184,245,60,0.4);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(184,245,60,0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(184,245,60,0); }
+  100% { box-shadow: 0 0 0 0 rgba(184,245,60,0); }
+}
+
+.hero-eyebrow span {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--lime);
+}
+
+.hero-title {
+  font-family: var(--display);
+  font-size: clamp(64px, 8vw, 108px);
+  line-height: 0.92;
+  letter-spacing: 0.02em;
+  color: var(--text);
+  margin-bottom: 28px;
+}
+
+.hero-title .line2 {
+  display: block;
+  color: transparent;
+  -webkit-text-stroke: 1px rgba(255,255,255,0.2);
+  position: relative;
+}
+
+.hero-title .line2::after {
+  content: 'ENGINEER';
+  position: absolute;
+  left: 0; top: 0;
+  background: linear-gradient(90deg, var(--lime), var(--sky));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  clip-path: inset(0 60% 0 0);
+  animation: reveal 3s ease-in-out infinite alternate;
+}
+
+@keyframes reveal {
+  from { clip-path: inset(0 60% 0 0); }
+  to   { clip-path: inset(0 0% 0 0); }
+}
+
+.hero-desc {
+  font-size: 16px;
+  color: var(--text2);
+  line-height: 1.8;
+  max-width: 520px;
+  margin-bottom: 36px;
+  font-weight: 300;
+}
+
+.hero-stats {
+  display: flex;
+  gap: 32px;
+}
+
+.hero-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.hero-stat .num {
+  font-family: var(--display);
+  font-size: 36px;
+  letter-spacing: 0.05em;
+  color: var(--lime);
+  line-height: 1;
+}
+
+.hero-stat .label {
+  font-size: 12px;
+  color: var(--text3);
+  font-family: var(--mono);
+  letter-spacing: 0.08em;
+}
+
+/* Hero featured card */
+.hero-featured {
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  overflow: hidden;
+  position: relative;
+  transition: border-color 0.3s, transform 0.3s;
+  cursor: pointer;
+}
+
+.hero-featured:hover {
+  border-color: rgba(184,245,60,0.3);
+  transform: translateY(-4px);
+}
+
+.hero-featured-top {
+  height: 4px;
+  background: linear-gradient(90deg, var(--lime), var(--sky), var(--violet));
+}
+
+.hero-featured-body {
+  padding: 28px;
+}
+
+.featured-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--lime);
+  background: var(--lime-dim);
+  border: 1px solid rgba(184,245,60,0.2);
+  padding: 4px 10px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.hero-featured h2 {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.35;
+  color: var(--text);
+  margin-bottom: 12px;
+}
+
+.hero-featured p {
+  font-size: 13.5px;
+  color: var(--text2);
+  line-height: 1.7;
+  margin-bottom: 20px;
+}
+
+.hero-featured-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 18px;
+  border-top: 1px solid var(--border);
+}
+
+.author-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.author-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--lime), var(--sky));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--void);
+}
+
+.author-info .name { font-size: 12px; font-weight: 600; color: var(--text); }
+.author-info .date { font-size: 11px; color: var(--text3); font-family: var(--mono); }
+
+.read-btn {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--lime);
+  background: var(--lime-dim);
+  border: 1px solid rgba(184,245,60,0.2);
+  padding: 6px 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background 0.2s;
+  letter-spacing: 0.05em;
+}
+
+.read-btn:hover { background: rgba(184,245,60,0.2); }
+
+/* ════════════════════════════════
+   SEARCH
+════════════════════════════════ */
+.search-section {
+  background: var(--void2);
+  border-bottom: 1px solid var(--border);
+  padding: 32px 48px;
+}
+
+.search-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.search-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 14px;
+}
+
+.search-bar {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.search-input-wrap {
+  flex: 1;
+  position: relative;
+}
+
+.search-icon {
+  position: absolute;
+  left: 18px; top: 50%;
+  transform: translateY(-50%);
+  color: var(--text3);
+  font-size: 16px;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border2);
+  border-radius: 10px;
+  padding: 14px 18px 14px 48px;
+  font-family: var(--sans);
+  font-size: 15px;
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.search-input::placeholder { color: var(--text3); }
+.search-input:focus {
+  border-color: rgba(184,245,60,0.4);
+  box-shadow: 0 0 0 3px rgba(184,245,60,0.06);
+}
+
+.search-submit {
+  background: var(--lime);
+  color: var(--void);
+  border: none;
+  border-radius: 10px;
+  padding: 0 28px;
+  font-family: var(--sans);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.03em;
+  transition: background 0.2s, transform 0.15s;
+  white-space: nowrap;
+}
+
+.search-submit:hover { background: var(--lime2); transform: translateY(-1px); }
+
+/* Keyword chips */
+.keyword-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.kw-label {
+  font-size: 12px;
+  color: var(--text3);
+  font-family: var(--mono);
+  margin-right: 4px;
+}
+
+.kw-chip {
+  font-family: var(--mono);
+  font-size: 12px;
+  padding: 5px 14px;
+  border-radius: 999px;
+  border: 1px solid var(--border2);
+  color: var(--text2);
+  background: var(--surface);
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.03em;
+}
+
+.kw-chip:hover, .kw-chip.active {
+  border-color: var(--lime);
+  color: var(--lime);
+  background: var(--lime-dim);
+}
+
+.kw-chip.c-amber:hover, .kw-chip.c-amber.active { border-color: var(--amber); color: var(--amber); background: var(--amber-dim); }
+.kw-chip.c-sky:hover, .kw-chip.c-sky.active { border-color: var(--sky); color: var(--sky); background: var(--sky-dim); }
+.kw-chip.c-rose:hover, .kw-chip.c-rose.active { border-color: var(--rose); color: var(--rose); background: var(--rose-dim); }
+.kw-chip.c-violet:hover, .kw-chip.c-violet.active { border-color: var(--violet); color: var(--violet); background: var(--violet-dim); }
+
+/* ════════════════════════════════
+   MAIN LAYOUT
+════════════════════════════════ */
+.main-wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 56px 48px 100px;
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 56px;
+  align-items: start;
+}
+
+/* Section headings */
+.section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+
+.section-head h2 {
+  font-family: var(--display);
+  font-size: 28px;
+  letter-spacing: 0.06em;
+  color: var(--text);
+}
+
+.section-head .sec-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  letter-spacing: 0.1em;
+}
+
+.section-head .view-all {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--lime);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+  transition: opacity 0.2s;
+}
+
+.section-head .view-all:hover { opacity: 0.7; }
+
+/* ════════════════════════════════
+   TOPIC SECTIONS
+════════════════════════════════ */
+.topics-section { margin-bottom: 56px; }
+
+.topics-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 40px;
+}
+
+.topic-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.topic-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.topic-card:hover { transform: translateY(-2px); border-color: var(--border2); }
+.topic-card:hover::before { opacity: 1; }
+
+.topic-card.t-lime::before { background: var(--lime); }
+.topic-card.t-amber::before { background: var(--amber); }
+.topic-card.t-sky::before { background: var(--sky); }
+.topic-card.t-rose::before { background: var(--rose); }
+.topic-card.t-violet::before { background: var(--violet); }
+.topic-card.t-teal::before { background: #2dd4bf; }
+
+.topic-card:hover.t-lime { background: rgba(184,245,60,0.04); }
+.topic-card:hover.t-amber { background: rgba(245,166,35,0.04); }
+.topic-card:hover.t-sky { background: rgba(56,178,240,0.04); }
+.topic-card:hover.t-rose { background: rgba(240,78,110,0.04); }
+.topic-card:hover.t-violet { background: rgba(155,109,255,0.04); }
+.topic-card:hover.t-teal { background: rgba(45,212,191,0.04); }
+
+.topic-icon {
+  font-size: 24px;
+  margin-bottom: 12px;
+  display: block;
+}
+
+.topic-card h3 {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 5px;
+  letter-spacing: -0.01em;
+}
+
+.topic-card p {
+  font-size: 12px;
+  color: var(--text3);
+  line-height: 1.6;
+  margin-bottom: 14px;
+}
+
+.topic-count {
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--border2);
+  color: var(--text3);
+}
+
+.topic-card.t-lime .topic-count { border-color: rgba(184,245,60,0.25); color: var(--lime); }
+.topic-card.t-amber .topic-count { border-color: rgba(245,166,35,0.25); color: var(--amber); }
+.topic-card.t-sky .topic-count { border-color: rgba(56,178,240,0.25); color: var(--sky); }
+.topic-card.t-rose .topic-count { border-color: rgba(240,78,110,0.25); color: var(--rose); }
+.topic-card.t-violet .topic-count { border-color: rgba(155,109,255,0.25); color: var(--violet); }
+.topic-card.t-teal .topic-count { border-color: rgba(45,212,191,0.25); color: #2dd4bf; }
+
+/* ════════════════════════════════
+   ARTICLE CARDS
+════════════════════════════════ */
+.articles-section { margin-bottom: 56px; }
+
+.article-feed { display: flex; flex-direction: column; gap: 2px; }
+
+.art-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 26px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 20px;
+  align-items: start;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+  margin-bottom: 10px;
+  position: relative;
+  overflow: hidden;
+}
+
+.art-card::after {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 3px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.art-card:hover { border-color: var(--border2); transform: translateX(4px); background: var(--surface2); }
+.art-card:hover::after { opacity: 1; }
+
+.art-card.ac-lime::after { background: var(--lime); }
+.art-card.ac-amber::after { background: var(--amber); }
+.art-card.ac-sky::after { background: var(--sky); }
+.art-card.ac-rose::after { background: var(--rose); }
+.art-card.ac-violet::after { background: var(--violet); }
+
+.art-meta-top {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.art-tag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 3px;
+  font-weight: 500;
+}
+
+.tag-lime { background: var(--lime-dim); color: var(--lime); border: 1px solid rgba(184,245,60,0.2); }
+.tag-amber { background: var(--amber-dim); color: var(--amber); border: 1px solid rgba(245,166,35,0.2); }
+.tag-sky { background: var(--sky-dim); color: var(--sky); border: 1px solid rgba(56,178,240,0.2); }
+.tag-rose { background: var(--rose-dim); color: var(--rose); border: 1px solid rgba(240,78,110,0.2); }
+.tag-violet { background: var(--violet-dim); color: var(--violet); border: 1px solid rgba(155,109,255,0.2); }
+
+.art-date {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+}
+
+.art-title {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+  margin-bottom: 8px;
+  letter-spacing: -0.01em;
+}
+
+.art-excerpt {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.65;
+  margin-bottom: 14px;
+}
+
+.art-footer {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.art-kws {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.art-kw {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  background: var(--void2);
+  border: 1px solid var(--border);
+  padding: 2px 8px;
+  border-radius: 3px;
+}
+
+.art-reading {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  white-space: nowrap;
+}
+
+.art-num {
+  font-family: var(--display);
+  font-size: 48px;
+  color: var(--text4);
+  line-height: 1;
+  letter-spacing: 0.05em;
+  align-self: center;
+  user-select: none;
+}
+
+/* Load more */
+.load-more-btn {
+  width: 100%;
+  background: var(--surface);
+  border: 1px dashed var(--border2);
+  border-radius: 10px;
+  padding: 16px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  color: var(--text3);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+  margin-top: 4px;
+}
+
+.load-more-btn:hover { border-color: var(--lime); color: var(--lime); }
+
+/* ════════════════════════════════
+   SIDEBAR
+════════════════════════════════ */
+.sidebar { display: flex; flex-direction: column; gap: 32px; }
+
+/* Sidebar section */
+.sb-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+.sb-head {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.sb-head h3 {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text2);
+  font-weight: 500;
+}
+
+.sb-head a {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--lime);
+  text-decoration: none;
+  letter-spacing: 0.08em;
+}
+
+/* Trending */
+.trending-item {
+  display: flex;
+  gap: 16px;
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border);
+  cursor: pointer;
+  transition: background 0.2s;
+  align-items: flex-start;
+}
+
+.trending-item:last-child { border-bottom: none; }
+.trending-item:hover { background: var(--surface2); }
+
+.trend-rank {
+  font-family: var(--display);
+  font-size: 28px;
+  color: var(--text4);
+  line-height: 1;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.trend-rank.hot { color: rgba(240,78,110,0.4); }
+
+.trend-info h4 {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+  margin-bottom: 5px;
+}
+
+.trend-meta {
+  display: flex;
+  gap: 10px;
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+}
+
+/* Tag cloud */
+.tag-cloud {
+  padding: 18px 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.cloud-tag {
+  font-family: var(--mono);
+  font-size: 11px;
+  padding: 5px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--border2);
+  color: var(--text2);
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.cloud-tag:hover { border-color: var(--lime); color: var(--lime); background: var(--lime-dim); }
+.cloud-tag .ct-count { font-size: 10px; color: var(--text3); }
+
+/* Newsletter */
+.newsletter-box {
+  padding: 24px 20px;
+}
+
+.newsletter-box h4 {
+  font-family: var(--serif);
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+  line-height: 1.35;
+}
+
+.newsletter-box p {
+  font-size: 12.5px;
+  color: var(--text2);
+  line-height: 1.65;
+  margin-bottom: 16px;
+}
+
+.nl-input {
+  width: 100%;
+  background: var(--void2);
+  border: 1px solid var(--border2);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-family: var(--sans);
+  font-size: 13px;
+  color: var(--text);
+  outline: none;
+  margin-bottom: 10px;
+  transition: border-color 0.2s;
+}
+
+.nl-input::placeholder { color: var(--text3); }
+.nl-input:focus { border-color: rgba(184,245,60,0.4); }
+
+.nl-btn {
+  width: 100%;
+  background: var(--lime);
+  color: var(--void);
+  border: none;
+  border-radius: 8px;
+  padding: 11px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.nl-btn:hover { background: var(--lime2); }
+
+.nl-note {
+  font-size: 11px;
+  color: var(--text3);
+  font-family: var(--mono);
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* About card */
+.about-card {
+  padding: 24px 20px;
+}
+
+.about-card p {
+  font-size: 13px;
+  color: var(--text2);
+  line-height: 1.7;
+  margin-bottom: 16px;
+}
+
+.about-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.about-stat {
+  background: var(--void2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 12px;
+  text-align: center;
+}
+
+.about-stat .n {
+  font-family: var(--display);
+  font-size: 28px;
+  color: var(--lime);
+  letter-spacing: 0.05em;
+  line-height: 1;
+  margin-bottom: 3px;
+}
+
+.about-stat .l { font-size: 11px; color: var(--text3); font-family: var(--mono); }
+
+/* ════════════════════════════════
+   FEATURED SERIES BANNER
+════════════════════════════════ */
+.series-banner {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 36px 40px;
+  margin-bottom: 56px;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 40px;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.series-banner::before {
+  content: 'SERIES';
+  position: absolute;
+  right: -30px; top: -30px;
+  font-family: var(--display);
+  font-size: 120px;
+  color: rgba(255,255,255,0.02);
+  letter-spacing: 0.1em;
+  user-select: none;
+}
+
+.series-meta {
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.series-meta::before {
+  content: '';
+  width: 20px; height: 1px;
+  background: var(--amber);
+}
+
+.series-banner h2 {
+  font-family: var(--display);
+  font-size: 38px;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  line-height: 1;
+  margin-bottom: 12px;
+}
+
+.series-banner p {
+  font-size: 14px;
+  color: var(--text2);
+  line-height: 1.7;
+  max-width: 480px;
+}
+
+.series-episodes {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 200px;
+}
+
+.ep-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.ep-item:hover { border-color: var(--amber); background: rgba(245,166,35,0.05); }
+
+.ep-num {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--amber);
+  background: rgba(245,166,35,0.1);
+  border: 1px solid rgba(245,166,35,0.2);
+  padding: 2px 7px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.ep-title {
+  font-size: 12px;
+  color: var(--text2);
+  line-height: 1.3;
+}
+
+/* ════════════════════════════════
+   FOOTER
+════════════════════════════════ */
+.site-footer {
+  border-top: 1px solid var(--border);
+  padding: 40px 48px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  gap: 40px;
+  align-items: start;
+}
+
+.footer-brand .logo-text { font-size: 18px; }
+.footer-brand p {
+  font-size: 12.5px;
+  color: var(--text3);
+  line-height: 1.7;
+  margin-top: 10px;
+  max-width: 220px;
+}
+
+.footer-col h4 {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text3);
+  margin-bottom: 14px;
+}
+
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.footer-col li a {
+  font-size: 13px;
+  color: var(--text2);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.footer-col li a:hover { color: var(--lime); }
+
+.footer-copy {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  align-self: end;
+  text-align: right;
+}
+
+/* ════════════════════════════════
+   ANIMATIONS
+════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-inner { animation: fadeUp 0.7s ease both; }
+.search-section { animation: fadeUp 0.7s 0.1s ease both; }
+.topics-grid > * { animation: fadeUp 0.5s ease both; }
+.topics-grid > *:nth-child(1) { animation-delay: 0.05s; }
+.topics-grid > *:nth-child(2) { animation-delay: 0.1s; }
+.topics-grid > *:nth-child(3) { animation-delay: 0.15s; }
+.topics-grid > *:nth-child(4) { animation-delay: 0.2s; }
+.topics-grid > *:nth-child(5) { animation-delay: 0.25s; }
+.topics-grid > *:nth-child(6) { animation-delay: 0.3s; }
+
+/* ════════════════════════════════
+   SCROLLBAR
+════════════════════════════════ */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: var(--void); }
+::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text4); }
+
+/* ════════════════════════════════
+   RESPONSIVE
+════════════════════════════════ */
+@media (max-width: 1024px) {
+  .main-wrap { grid-template-columns: 1fr; }
+  .sidebar { display: grid; grid-template-columns: 1fr 1fr; }
+  .topics-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero-inner { grid-template-columns: 1fr; }
+  .hero-featured { display: none; }
+  .series-banner { grid-template-columns: 1fr; }
+  .site-footer { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 640px) {
+  .site-header, .hero, .search-section, .main-wrap, .site-footer { padding-left: 20px; padding-right: 20px; }
+  .topics-grid { grid-template-columns: 1fr; }
+  .sidebar { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  .hero-title { font-size: 56px; }
+  .hero-stats { gap: 20px; }
+  .site-footer { grid-template-columns: 1fr; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<header class="site-header">
+  <a href="#" class="logo">
+    <div class="logo-mark">AG</div>
+    <div class="logo-text">AGENT<span>.DEV</span></div>
+  </a>
+  <nav class="nav-links">
+    <a href="#" class="active">首页</a>
+    <a href="#">专题</a>
+    <a href="#">教程</a>
+    <a href="#">工具库</a>
+    <a href="#">论文速读</a>
+    <a href="#" class="nav-cta">订阅周刊</a>
+  </nav>
+</header>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero-orb"></div>
+  <div class="hero-inner">
+    <div class="hero-left">
+      <div class="hero-eyebrow">
+        <div class="pulse"></div>
+        <span>持续更新中 · Vol.042 · 2025</span>
+      </div>
+      <h1 class="hero-title">
+        AGENT<br>
+        <span class="line2">ENGINEER</span>
+      </h1>
+      <p class="hero-desc">深入 AI Agent 系统的工程实践——工具调用、记忆架构、多智能体协作、生产部署，写给真正在一线构建 Agent 的工程师。</p>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <span class="num">187</span>
+          <span class="label">// 篇文章</span>
+        </div>
+        <div class="hero-stat">
+          <span class="num">18</span>
+          <span class="label">// 专题系列</span>
+        </div>
+        <div class="hero-stat">
+          <span class="num">6.2K</span>
+          <span class="label">// 订阅者</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-featured">
+      <div class="hero-featured-top"></div>
+      <div class="hero-featured-body">
+        <div class="featured-badge">⚡ 本周精选</div>
+        <h2>LangGraph 状态机 vs 传统 ReAct：生产环境下谁更稳？</h2>
+        <p>我们用同一个复杂任务基准测试了两种架构，结果出乎意料——在超过 12 步的任务中，状态机架构的成功率高出 34%……</p>
+        <div class="hero-featured-meta">
+          <div class="author-chip">
+            <div class="author-avatar">陈</div>
+            <div class="author-info">
+              <div class="name">陈思远</div>
+              <div class="date">2025-08-21 · 18 min</div>
+            </div>
+          </div>
+          <button class="read-btn">READ →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ SEARCH ═══ -->
+<section class="search-section">
+  <div class="search-inner">
+    <div class="search-label">// 关键词搜索</div>
+    <div class="search-bar">
+      <div class="search-input-wrap">
+        <span class="search-icon">⌕</span>
+        <input class="search-input" type="text" placeholder="搜索文章、工具、技术概念…" id="searchInput">
+      </div>
+      <button class="search-submit" onclick="doSearch()">搜索</button>
+    </div>
+    <div class="keyword-row">
+      <span class="kw-label">热门关键词：</span>
+      <span class="kw-chip active" onclick="toggleKw(this)">全部</span>
+      <span class="kw-chip" onclick="toggleKw(this)">ReAct</span>
+      <span class="kw-chip" onclick="toggleKw(this)">Function Calling</span>
+      <span class="kw-chip c-sky" onclick="toggleKw(this)">RAG</span>
+      <span class="kw-chip c-sky" onclick="toggleKw(this)">向量数据库</span>
+      <span class="kw-chip c-amber" onclick="toggleKw(this)">多 Agent</span>
+      <span class="kw-chip c-amber" onclick="toggleKw(this)">LangGraph</span>
+      <span class="kw-chip c-rose" onclick="toggleKw(this)">Prompt 工程</span>
+      <span class="kw-chip c-rose" onclick="toggleKw(this)">DSPy</span>
+      <span class="kw-chip c-violet" onclick="toggleKw(this)">MCP</span>
+      <span class="kw-chip c-violet" onclick="toggleKw(this)">生产部署</span>
+      <span class="kw-chip" onclick="toggleKw(this)">评估体系</span>
+      <span class="kw-chip" onclick="toggleKw(this)">安全对齐</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ MAIN CONTENT ═══ -->
+<div class="main-wrap">
+  <main>
+
+    <!-- Topics -->
+    <section class="topics-section">
+      <div class="section-head">
+        <h2>TOPICS</h2>
+        <span class="sec-count">// 18 个专题</span>
+        <a href="#" class="view-all">VIEW ALL →</a>
+      </div>
+
+      <div class="topics-grid">
+        <div class="topic-card t-lime">
+          <span class="topic-icon">🔧</span>
+          <h3>工具调用系统</h3>
+          <p>Function Calling、MCP、工具设计、并行执行与错误处理</p>
+          <span class="topic-count">28 篇</span>
+        </div>
+        <div class="topic-card t-sky">
+          <span class="topic-icon">🧠</span>
+          <h3>记忆与 RAG</h3>
+          <p>向量数据库、混合检索、长期记忆架构、GraphRAG</p>
+          <span class="topic-count">24 篇</span>
+        </div>
+        <div class="topic-card t-amber">
+          <span class="topic-icon">🤝</span>
+          <h3>多智能体协作</h3>
+          <p>Supervisor-Worker、对等网络、AutoGen、CrewAI 实战</p>
+          <span class="topic-count">19 篇</span>
+        </div>
+        <div class="topic-card t-rose">
+          <span class="topic-icon">📐</span>
+          <h3>Prompt 工程</h3>
+          <p>CoT、自我批判、DSPy 自动优化、结构化输出设计</p>
+          <span class="topic-count">31 篇</span>
+        </div>
+        <div class="topic-card t-violet">
+          <span class="topic-icon">🚀</span>
+          <h3>生产部署</h3>
+          <p>异步架构、Docker、队列系统、可观测性、成本控制</p>
+          <span class="topic-count">22 篇</span>
+        </div>
+        <div class="topic-card t-teal">
+          <span class="topic-icon">📊</span>
+          <h3>评估与测试</h3>
+          <p>LLM-as-Judge、Golden Set、CI 集成、对抗性测试</p>
+          <span class="topic-count">17 篇</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Series Banner -->
+    <div class="series-banner">
+      <div>
+        <div class="series-meta">精品系列</div>
+        <h2>AGENT FROM<br>SCRATCH</h2>
+        <p>从零开始构建生产级 Agent——不依赖任何框架，手写每一行代码，真正理解 Agent 底层原理。共 8 集，每集附完整可运行代码。</p>
+      </div>
+      <div class="series-episodes">
+        <div class="ep-item">
+          <span class="ep-num">EP01</span>
+          <span class="ep-title">最小 ReAct 循环实现</span>
+        </div>
+        <div class="ep-item">
+          <span class="ep-num">EP02</span>
+          <span class="ep-title">工具注册表与调度器</span>
+        </div>
+        <div class="ep-item">
+          <span class="ep-num">EP03</span>
+          <span class="ep-title">向量记忆系统接入</span>
+        </div>
+        <div class="ep-item">
+          <span class="ep-num">EP04</span>
+          <span class="ep-title">并发执行与状态管理</span>
+        </div>
+        <div class="ep-item">
+          <span class="ep-num">EP05</span>
+          <span class="ep-title">生产化部署与监控</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Latest Articles -->
+    <section class="articles-section" id="articles">
+      <div class="section-head">
+        <h2>LATEST</h2>
+        <span class="sec-count">// 最新文章</span>
+        <a href="#" class="view-all">VIEW ALL →</a>
+      </div>
+
+      <div class="article-feed" id="articleFeed">
+
+        <div class="art-card ac-lime">
+          <div class="art-body">
+            <div class="art-meta-top">
+              <span class="art-tag tag-lime">工具调用</span>
+              <span class="art-date">2025-08-21</span>
+            </div>
+            <div class="art-title">LangGraph 状态机 vs ReAct：生产环境下 12 步以上任务的成功率对比</div>
+            <div class="art-excerpt">我们在相同的基准任务上对比了两种 Agent 控制流范式。超过 12 步时，状态机的任务完成率高出 34%——但代价是什么？</div>
+            <div class="art-footer">
+              <div class="art-kws">
+                <span class="art-kw">LangGraph</span>
+                <span class="art-kw">ReAct</span>
+                <span class="art-kw">状态机</span>
+                <span class="art-kw">评估</span>
+              </div>
+              <span class="art-reading">⏱ 18 min</span>
+            </div>
+          </div>
+          <div class="art-num">01</div>
+        </div>
+
+        <div class="art-card ac-sky">
+          <div class="art-body">
+            <div class="art-meta-top">
+              <span class="art-tag tag-sky">RAG</span>
+              <span class="art-date">2025-08-17</span>
+            </div>
+            <div class="art-title">Agentic RAG 实战：让 Agent 自主决策"何时检索、检索什么"</div>
+            <div class="art-excerpt">传统 RAG 是被动的——有问题就检索。Agentic RAG 让 Agent 主动判断是否需要检索，以及用什么 Query 检索，准确率提升显著。</div>
+            <div class="art-footer">
+              <div class="art-kws">
+                <span class="art-kw">RAG</span>
+                <span class="art-kw">向量检索</span>
+                <span class="art-kw">Qdrant</span>
+              </div>
+              <span class="art-reading">⏱ 14 min</span>
+            </div>
+          </div>
+          <div class="art-num">02</div>
+        </div>
+
+        <div class="art-card ac-violet">
+          <div class="art-body">
+            <div class="art-meta-top">
+              <span class="art-tag tag-violet">MCP</span>
+              <span class="art-date">2025-08-14</span>
+            </div>
+            <div class="art-title">写一个 MCP Server 并发布到社区：从开发到上线全流程</div>
+            <div class="art-excerpt">MCP 正在成为 Agent 工具生态的标准接口。本文手把手带你用 FastMCP 开发、测试、打包并发布一个天气查询 MCP Server。</div>
+            <div class="art-footer">
+              <div class="art-kws">
+                <span class="art-kw">MCP</span>
+                <span class="art-kw">FastMCP</span>
+                <span class="art-kw">工具开发</span>
+              </div>
+              <span class="art-reading">⏱ 12 min</span>
+            </div>
+          </div>
+          <div class="art-num">03</div>
+        </div>
+
+        <div class="art-card ac-amber">
+          <div class="art-body">
+            <div class="art-meta-top">
+              <span class="art-tag tag-amber">多 Agent</span>
+              <span class="art-date">2025-08-10</span>
+            </div>
+            <div class="art-title">辩论审查模式：用两个 Agent 互相 Review 将幻觉率降低 42%</div>
+            <div class="art-excerpt">一个 Agent 生成，另一个批判。在金融分析场景中，这套辩论机制将输出中的不准确信息占比从 18% 降至 10%，且无需额外训练。</div>
+            <div class="art-footer">
+              <div class="art-kws">
+                <span class="art-kw">多 Agent</span>
+                <span class="art-kw">幻觉</span>
+                <span class="art-kw">质量保障</span>
+              </div>
+              <span class="art-reading">⏱ 16 min</span>
+            </div>
+          </div>
+          <div class="art-num">04</div>
+        </div>
+
+        <div class="art-card ac-rose">
+          <div class="art-body">
+            <div class="art-meta-top">
+              <span class="art-tag tag-rose">Prompt 工程</span>
+              <span class="art-date">2025-08-07</span>
+            </div>
+            <div class="art-title">DSPy MIPROv2 实战：用 30 条训练样本让 Agent 准确率提升 23%</div>
+            <div class="art-excerpt">手写 Prompt 的时代正在结束。我们用 DSPy 的 MIPROv2 优化器，在一个代码审查 Agent 上跑了 50 次 Trial，最终找到了比专家手写版本更优的 Prompt。</div>
+            <div class="art-footer">
+              <div class="art-kws">
+                <span class="art-kw">DSPy</span>
+                <span class="art-kw">MIPROv2</span>
+                <span class="art-kw">自动优化</span>
+              </div>
+              <span class="art-reading">⏱ 20 min</span>
+            </div>
+          </div>
+          <div class="art-num">05</div>
+        </div>
+
+        <div class="art-card ac-lime">
+          <div class="art-body">
+            <div class="art-meta-top">
+              <span class="art-tag tag-lime">生产部署</span>
+              <span class="art-date">2025-08-03</span>
+            </div>
+            <div class="art-title">Agent Worker 的优雅关闭：SIGTERM 处理、任务迁移与零中断发布</div>
+            <div class="art-excerpt">滚动更新时，正在执行的 Agent 任务怎么办？我们设计了一套基于 Redis 的任务迁移机制，实现了真正的零中断发布。</div>
+            <div class="art-footer">
+              <div class="art-kws">
+                <span class="art-kw">Docker</span>
+                <span class="art-kw">Redis</span>
+                <span class="art-kw">零停机</span>
+              </div>
+              <span class="art-reading">⏱ 11 min</span>
+            </div>
+          </div>
+          <div class="art-num">06</div>
+        </div>
+
+        <div class="art-card ac-sky">
+          <div class="art-body">
+            <div class="art-meta-top">
+              <span class="art-tag tag-sky">评估测试</span>
+              <span class="art-date">2025-07-30</span>
+            </div>
+            <div class="art-title">构建 Agent 的 Golden Test Set：从线上 Bug 到回归测试用例的转化流程</div>
+            <div class="art-excerpt">每一个线上 Bug 都应该成为一条测试用例。我们分享了一套完整的流程，将 Trace 数据自动转化为结构化测试用例并纳入 CI。</div>
+            <div class="art-footer">
+              <div class="art-kws">
+                <span class="art-kw">测试</span>
+                <span class="art-kw">CI</span>
+                <span class="art-kw">质量</span>
+              </div>
+              <span class="art-reading">⏱ 13 min</span>
+            </div>
+          </div>
+          <div class="art-num">07</div>
+        </div>
+
+        <div class="art-card ac-violet">
+          <div class="art-body">
+            <div class="art-meta-top">
+              <span class="art-tag tag-violet">安全</span>
+              <span class="art-date">2025-07-25</span>
+            </div>
+            <div class="art-title">Prompt Injection 攻击全图谱：12 种攻击手法与对应防御策略</div>
+            <div class="art-excerpt">我们整理了目前已知的 12 种针对 Agent 的 Prompt Injection 变体，并为每种攻击提供了可落地的防御实现，附完整测试脚本。</div>
+            <div class="art-footer">
+              <div class="art-kws">
+                <span class="art-kw">安全</span>
+                <span class="art-kw">Prompt Injection</span>
+                <span class="art-kw">防御</span>
+              </div>
+              <span class="art-reading">⏱ 22 min</span>
+            </div>
+          </div>
+          <div class="art-num">08</div>
+        </div>
+
+      </div>
+
+      <button class="load-more-btn" onclick="loadMore()">
+        ── 加载更多文章 ──
+      </button>
+    </section>
+
+  </main>
+
+  <!-- ═══ SIDEBAR ═══ -->
+  <aside class="sidebar">
+
+    <!-- Trending -->
+    <div class="sb-section">
+      <div class="sb-head">
+        <h3>// 本周热门</h3>
+        <a href="#">全部</a>
+      </div>
+      <div class="trending-item">
+        <div class="trend-rank hot">01</div>
+        <div class="trend-info">
+          <h4>从零实现一个 ReAct Agent，不用任何框架</h4>
+          <div class="trend-meta">
+            <span>📖 8.2K 阅读</span>
+            <span>⏱ 22 min</span>
+          </div>
+        </div>
+      </div>
+      <div class="trending-item">
+        <div class="trend-rank hot">02</div>
+        <div class="trend-info">
+          <h4>LangGraph vs AutoGen：2025 年该选哪个？</h4>
+          <div class="trend-meta">
+            <span>📖 6.5K 阅读</span>
+            <span>⏱ 15 min</span>
+          </div>
+        </div>
+      </div>
+      <div class="trending-item">
+        <div class="trend-rank">03</div>
+        <div class="trend-info">
+          <h4>向量数据库选型指南：Qdrant vs Chroma vs Weaviate</h4>
+          <div class="trend-meta">
+            <span>📖 5.1K 阅读</span>
+            <span>⏱ 18 min</span>
+          </div>
+        </div>
+      </div>
+      <div class="trending-item">
+        <div class="trend-rank">04</div>
+        <div class="trend-info">
+          <h4>MCP 协议完全指南：从原理到实战</h4>
+          <div class="trend-meta">
+            <span>📖 4.8K 阅读</span>
+            <span>⏱ 16 min</span>
+          </div>
+        </div>
+      </div>
+      <div class="trending-item">
+        <div class="trend-rank">05</div>
+        <div class="trend-info">
+          <h4>Agent Token 成本优化：实测降低 65% 的 6 种方法</h4>
+          <div class="trend-meta">
+            <span>📖 4.2K 阅读</span>
+            <span>⏱ 14 min</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Newsletter -->
+    <div class="sb-section">
+      <div class="sb-head"><h3>// 订阅周刊</h3></div>
+      <div class="newsletter-box">
+        <h4>每周五，Agent 工程前沿进展</h4>
+        <p>精选本周最值得读的论文、开源项目和工程实践，不灌水，直接干货。</p>
+        <input class="nl-input" type="email" placeholder="your@email.com">
+        <button class="nl-btn">免费订阅</button>
+        <div class="nl-note">已有 6,218 名工程师订阅 · 随时退订</div>
+      </div>
+    </div>
+
+    <!-- Tag Cloud -->
+    <div class="sb-section">
+      <div class="sb-head"><h3>// 标签云</h3></div>
+      <div class="tag-cloud">
+        <span class="cloud-tag">ReAct <span class="ct-count">28</span></span>
+        <span class="cloud-tag">RAG <span class="ct-count">24</span></span>
+        <span class="cloud-tag">LangGraph <span class="ct-count">19</span></span>
+        <span class="cloud-tag">MCP <span class="ct-count">16</span></span>
+        <span class="cloud-tag">DSPy <span class="ct-count">12</span></span>
+        <span class="cloud-tag">AutoGen <span class="ct-count">11</span></span>
+        <span class="cloud-tag">向量DB <span class="ct-count">18</span></span>
+        <span class="cloud-tag">Prompt <span class="ct-count">31</span></span>
+        <span class="cloud-tag">多Agent <span class="ct-count">19</span></span>
+        <span class="cloud-tag">评估 <span class="ct-count">17</span></span>
+        <span class="cloud-tag">安全 <span class="ct-count">14</span></span>
+        <span class="cloud-tag">部署 <span class="ct-count">22</span></span>
+        <span class="cloud-tag">GPT-4o <span class="ct-count">9</span></span>
+        <span class="cloud-tag">Claude <span class="ct-count">13</span></span>
+        <span class="cloud-tag">幻觉 <span class="ct-count">8</span></span>
+        <span class="cloud-tag">HITL <span class="ct-count">7</span></span>
+      </div>
+    </div>
+
+    <!-- About -->
+    <div class="sb-section">
+      <div class="sb-head"><h3>// 关于本站</h3></div>
+      <div class="about-card">
+        <p>AGENT.DEV 是一个专注于 AI Agent 工程实践的技术博客，由一线工程师撰写，内容来自真实生产场景。</p>
+        <div class="about-stats">
+          <div class="about-stat">
+            <div class="n">187</div>
+            <div class="l">篇文章</div>
+          </div>
+          <div class="about-stat">
+            <div class="n">18</div>
+            <div class="l">专题系列</div>
+          </div>
+          <div class="about-stat">
+            <div class="n">6.2K</div>
+            <div class="l">订阅者</div>
+          </div>
+          <div class="about-stat">
+            <div class="n">2023</div>
+            <div class="l">创立于</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+</div>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="site-footer">
+  <div class="footer-brand">
+    <div class="logo">
+      <div class="logo-mark">AG</div>
+      <div class="logo-text">AGENT<span>.DEV</span></div>
+    </div>
+    <p>写给真正在构建 AI Agent 系统的工程师，来自一线实践，不蹭热点。</p>
+  </div>
+  <div class="footer-col">
+    <h4>内容</h4>
+    <ul>
+      <li><a href="#">最新文章</a></li>
+      <li><a href="#">精品系列</a></li>
+      <li><a href="#">论文速读</a></li>
+      <li><a href="#">开源工具库</a></li>
+      <li><a href="#">每周周刊</a></li>
+    </ul>
+  </div>
+  <div class="footer-col">
+    <h4>专题</h4>
+    <ul>
+      <li><a href="#">工具调用系统</a></li>
+      <li><a href="#">记忆与 RAG</a></li>
+      <li><a href="#">多智能体协作</a></li>
+      <li><a href="#">生产部署</a></li>
+      <li><a href="#">评估与测试</a></li>
+    </ul>
+  </div>
+  <div class="footer-copy">
+    © 2025 AGENT.DEV<br>
+    <span style="color:var(--lime);">// keep building</span>
+  </div>
+</footer>
+
+<script>
+/* ── Search ── */
+function doSearch() {
+  const q = document.getElementById('searchInput').value.trim();
+  if (!q) return;
+  // Simulate search highlight
+  document.getElementById('articles').scrollIntoView({ behavior: 'smooth' });
+  const input = document.getElementById('searchInput');
+  input.style.borderColor = 'rgba(184,245,60,0.6)';
+  setTimeout(() => { input.style.borderColor = ''; }, 1500);
+}
+
+document.getElementById('searchInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') doSearch();
+});
+
+/* ── Keyword chips ── */
+function toggleKw(el) {
+  document.querySelectorAll('.kw-chip').forEach(c => c.classList.remove('active'));
+  el.classList.add('active');
+
+  // Simulate filtering (highlight effect)
+  const feed = document.getElementById('articleFeed');
+  feed.style.opacity = '0.5';
+  feed.style.transform = 'translateY(4px)';
+  setTimeout(() => {
+    feed.style.opacity = '';
+    feed.style.transform = '';
+    feed.style.transition = 'opacity 0.3s, transform 0.3s';
+  }, 300);
+}
+
+/* ── Load More ── */
+const extraArticles = [
+  {
+    color: 'amber', tag: '工具调用', tagClass: 'tag-amber', date: '2025-07-22',
+    title: '并行工具调用的陷阱：Race Condition 与结果合并的正确姿势',
+    excerpt: '当 LLM 在单次响应中返回 5 个并行工具调用时，如何保证执行顺序、处理部分失败，以及将结果正确合并回上下文？',
+    kws: ['并行执行', 'Race Condition', '错误处理'],
+    time: '13 min', num: '09'
+  },
+  {
+    color: 'lime', tag: 'Prompt 工程', tagClass: 'tag-lime', date: '2025-07-18',
+    title: 'XML 标签 vs JSON Schema：Agent 输出结构化的两条路径对比',
+    excerpt: '用 XML 标签引导 LLM 输出结构化数据，在解析成功率上比纯 JSON 提示高出 12%。我们测了 500 个样本，数据说话。',
+    kws: ['结构化输出', 'XML', 'JSON'],
+    time: '10 min', num: '10'
+  }
+];
+
+let loaded = false;
+function loadMore() {
+  if (loaded) return;
+  loaded = true;
+  const feed = document.getElementById('articleFeed');
+
+  extraArticles.forEach(a => {
+    const div = document.createElement('div');
+    div.className = `art-card ac-${a.color}`;
+    div.style.opacity = '0';
+    div.style.transform = 'translateY(16px)';
+    div.innerHTML = `
+      <div class="art-body">
+        <div class="art-meta-top">
+          <span class="art-tag ${a.tagClass}">${a.tag}</span>
+          <span class="art-date">${a.date}</span>
+        </div>
+        <div class="art-title">${a.title}</div>
+        <div class="art-excerpt">${a.excerpt}</div>
+        <div class="art-footer">
+          <div class="art-kws">${a.kws.map(k => `<span class="art-kw">${k}</span>`).join('')}</div>
+          <span class="art-reading">⏱ ${a.time}</span>
+        </div>
+      </div>
+      <div class="art-num">${a.num}</div>`;
+    feed.appendChild(div);
+    setTimeout(() => {
+      div.style.transition = 'opacity 0.4s, transform 0.4s';
+      div.style.opacity = '1';
+      div.style.transform = '';
+    }, 50);
+  });
+
+  document.querySelector('.load-more-btn').textContent = '── 已加载全部文章 ──';
+  document.querySelector('.load-more-btn').style.cursor = 'default';
+  document.querySelector('.load-more-btn').style.color = 'var(--text4)';
+}
+
+/* ── Hover interactions ── */
+document.querySelectorAll('.art-card').forEach(card => {
+  card.addEventListener('click', () => {
+    card.style.transform = 'scale(0.99)';
+    setTimeout(() => card.style.transform = '', 150);
+  });
+});
+
+document.querySelectorAll('.topic-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const kw = card.querySelector('h3').textContent.trim();
+    document.getElementById('searchInput').value = kw;
+    document.querySelector('.search-section').scrollIntoView({ behavior: 'smooth' });
+  });
+});
+</script>
+</body>
+</html>

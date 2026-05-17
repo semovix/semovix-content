@@ -3,6 +3,7 @@
   "position": 2,
   "link": {
     "type": "generated-index",
+    "slug": "agent-foundation",
     "description": "建立对 AI Agent 的正确认知，理解 Agent 与 ChatBot、Copilot 的区别。"
   }
 }

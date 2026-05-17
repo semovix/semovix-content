@@ -1,0 +1,14 @@
+{
+  "title": {
+    "message": "Semovix 技术博客",
+    "description": "The title for the blog used in SEO"
+  },
+  "description": {
+    "message": "企业级 AI Agent、语义治理、Skill、Harness 与 AI Workbench 工程化实践。",
+    "description": "The description for the blog used in SEO"
+  },
+  "sidebar.title": {
+    "message": "最新文章",
+    "description": "The label for the left sidebar"
+  }
+}

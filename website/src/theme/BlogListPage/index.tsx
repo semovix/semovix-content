@@ -43,7 +43,7 @@ const TOPIC_CARDS: TopicCard[] = [
     title: 'AI Agent 工程化',
     description:
       '从 Agent 基础能力、上下文组织到任务闭环，形成可落地的工程认知。',
-    href: '/ai-agent-engineering-guide/01-agent-foundation',
+    href: '/ai-agent-engineering-guide/category/01-agent-基础认知',
     keywords: ['Agent Loop', 'Context', 'Task'],
   },
   {
@@ -51,7 +51,7 @@ const TOPIC_CARDS: TopicCard[] = [
     title: 'Tool、Skill 与 MCP',
     description:
       '聚焦能力封装、工具调用、Skill 沉淀与协议协同，理解智能体的执行接口。',
-    href: '/ai-agent-engineering-guide/03-tool-skill-protocol',
+    href: '/ai-agent-engineering-guide/category/03-toolskill-与-mcp',
     keywords: ['Tool Calling', 'Skill', 'MCP'],
   },
   {
@@ -59,7 +59,7 @@ const TOPIC_CARDS: TopicCard[] = [
     title: '语义治理与数据理解',
     description:
       '从业务语义、指标口径到治理工作台，解释企业数据如何被智能体理解。',
-    href: '/ai-agent-engineering-guide/05-semovix-semantic-governance',
+    href: '/ai-agent-engineering-guide/category/05-semovix-语义治理场景',
     keywords: ['Semantic Layer', 'Governance', 'Find Data'],
   },
   {
@@ -67,7 +67,7 @@ const TOPIC_CARDS: TopicCard[] = [
     title: 'AI Workbench 产品化',
     description:
       '讨论任务草稿、执行过程、结果块、人工确认与可回放体验的产品闭环。',
-    href: '/ai-agent-engineering-guide/06-ai-workbench-productization',
+    href: '/ai-agent-engineering-guide/category/06-ai-workbench-产品化',
     keywords: ['Workbench', 'Artifact', 'Human-in-the-loop'],
   },
 ];

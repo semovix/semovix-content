@@ -1,5 +1,6 @@
 import type {Config} from '@docusaurus/types';
 import type {Preset} from '@docusaurus/preset-classic';
+import {themes as prismThemes} from 'prism-react-renderer';
 
 const config: Config = {
   title: 'Semovix AI Agent 工程化指南',
@@ -195,6 +196,8 @@ const config: Config = {
     },
 
     prism: {
+      theme: prismThemes.github,
+      darkTheme: prismThemes.dracula,
       additionalLanguages: ['bash', 'json', 'yaml', 'typescript', 'python', 'go', 'sql'],
     },
   } satisfies Preset.ThemeConfig,

@@ -3,6 +3,7 @@
   "position": 1,
   "link": {
     "type": "generated-index",
+    "slug": "preface",
     "description": "说明本系列的定位、阅读方式、学习路径和 Semovix 总览。"
   }
 }

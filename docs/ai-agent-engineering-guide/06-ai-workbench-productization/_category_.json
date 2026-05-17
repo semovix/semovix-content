@@ -3,6 +3,7 @@
   "position": 7,
   "link": {
     "type": "generated-index",
+    "slug": "ai-workbench-productization",
     "description": "解释企业级 Agent 的产品形态、人机协同、评测、安全与平台化路径。"
   }
 }

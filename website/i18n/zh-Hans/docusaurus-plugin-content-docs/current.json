@@ -1,0 +1,142 @@
+{
+  "version.label": {
+    "message": "Next",
+    "description": "The label for version current"
+  },
+  "sidebar.aiAgentGuideSidebar.category.00. 前言与阅读路径": {
+    "message": "00. 前言与阅读路径",
+    "description": "The label for category '00. 前言与阅读路径' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.00. 前言与阅读路径.link.generated-index.title": {
+    "message": "前言与阅读路径",
+    "description": "The generated-index page title for category '00. 前言与阅读路径' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.00. 前言与阅读路径.link.generated-index.description": {
+    "message": "先理解本指南的定位、阅读方式与 Semovix 的整体认知框架。",
+    "description": "The generated-index page description for category '00. 前言与阅读路径' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.01. Agent 基础认知": {
+    "message": "01. Agent 基础认知",
+    "description": "The label for category '01. Agent 基础认知' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.01. Agent 基础认知.link.generated-index.title": {
+    "message": "Agent 基础认知",
+    "description": "The generated-index page title for category '01. Agent 基础认知' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.01. Agent 基础认知.link.generated-index.description": {
+    "message": "建立 Agent 的核心概念、能力边界与工程化视角。",
+    "description": "The generated-index page description for category '01. Agent 基础认知' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.02. LLM、Prompt 与 Context": {
+    "message": "02. LLM、Prompt 与 Context",
+    "description": "The label for category '02. LLM、Prompt 与 Context' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.02. LLM、Prompt 与 Context.link.generated-index.title": {
+    "message": "LLM、Prompt 与 Context",
+    "description": "The generated-index page title for category '02. LLM、Prompt 与 Context' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.02. LLM、Prompt 与 Context.link.generated-index.description": {
+    "message": "理解模型调用、提示词、上下文组织与稳定生成的基本方法。",
+    "description": "The generated-index page description for category '02. LLM、Prompt 与 Context' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.03. Tool、Skill 与 MCP": {
+    "message": "03. Tool、Skill 与 MCP",
+    "description": "The label for category '03. Tool、Skill 与 MCP' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.03. Tool、Skill 与 MCP.link.generated-index.title": {
+    "message": "Tool、Skill 与 MCP",
+    "description": "The generated-index page title for category '03. Tool、Skill 与 MCP' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.03. Tool、Skill 与 MCP.link.generated-index.description": {
+    "message": "把模型能力连接到工具、流程与外部系统。",
+    "description": "The generated-index page description for category '03. Tool、Skill 与 MCP' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.04. Agent Runtime 工程化": {
+    "message": "04. Agent Runtime 工程化",
+    "description": "The label for category '04. Agent Runtime 工程化' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.04. Agent Runtime 工程化.link.generated-index.title": {
+    "message": "Agent Runtime 工程化",
+    "description": "The generated-index page title for category '04. Agent Runtime 工程化' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.04. Agent Runtime 工程化.link.generated-index.description": {
+    "message": "沉淀 Harness、Runtime、状态、恢复、验证与任务执行机制。",
+    "description": "The generated-index page description for category '04. Agent Runtime 工程化' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.05. Semovix 语义治理场景": {
+    "message": "05. Semovix 语义治理场景",
+    "description": "The label for category '05. Semovix 语义治理场景' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.05. Semovix 语义治理场景.link.generated-index.title": {
+    "message": "Semovix 语义治理场景",
+    "description": "The generated-index page title for category '05. Semovix 语义治理场景' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.05. Semovix 语义治理场景.link.generated-index.description": {
+    "message": "理解企业语义层、指标口径、找数问数与知识沉淀场景。",
+    "description": "The generated-index page description for category '05. Semovix 语义治理场景' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.06. AI Workbench 产品化": {
+    "message": "06. AI Workbench 产品化",
+    "description": "The label for category '06. AI Workbench 产品化' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.06. AI Workbench 产品化.link.generated-index.title": {
+    "message": "AI Workbench 产品化",
+    "description": "The generated-index page title for category '06. AI Workbench 产品化' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.06. AI Workbench 产品化.link.generated-index.description": {
+    "message": "围绕前端工作台、任务可视化、结果块与人机协同展开。",
+    "description": "The generated-index page description for category '06. AI Workbench 产品化' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.07. 工程师成长路线": {
+    "message": "07. 工程师成长路线",
+    "description": "The label for category '07. 工程师成长路线' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.07. 工程师成长路线.link.generated-index.title": {
+    "message": "AI Agent 工程师成长路线",
+    "description": "The generated-index page title for category '07. 工程师成长路线' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.07. 工程师成长路线.link.generated-index.description": {
+    "message": "从认知、工程到产品化能力，形成阶段性进阶路径。",
+    "description": "The generated-index page description for category '07. 工程师成长路线' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.08. 案例库": {
+    "message": "08. 案例库",
+    "description": "The label for category '08. 案例库' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.08. 案例库.link.generated-index.title": {
+    "message": "案例库",
+    "description": "The generated-index page title for category '08. 案例库' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.08. 案例库.link.generated-index.description": {
+    "message": "沉淀典型业务场景与 Semovix 相关实践案例。",
+    "description": "The generated-index page description for category '08. 案例库' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.09. 图解与信息图": {
+    "message": "09. 图解与信息图",
+    "description": "The label for category '09. 图解与信息图' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.09. 图解与信息图.link.generated-index.title": {
+    "message": "图解与信息图",
+    "description": "The generated-index page title for category '09. 图解与信息图' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.09. 图解与信息图.link.generated-index.description": {
+    "message": "管理架构图、流程图与适合传播的知识图解。",
+    "description": "The generated-index page description for category '09. 图解与信息图' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.10. 模板库": {
+    "message": "10. 模板库",
+    "description": "The label for category '10. 模板库' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.10. 模板库.link.generated-index.title": {
+    "message": "模板库",
+    "description": "The generated-index page title for category '10. 模板库' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.category.10. 模板库.link.generated-index.description": {
+    "message": "文章、图解、Skill、Tool 与案例模板。",
+    "description": "The generated-index page description for category '10. 模板库' in sidebar 'aiAgentGuideSidebar'"
+  },
+  "sidebar.aiAgentGuideSidebar.link.指南总览": {
+    "message": "指南总览",
+    "description": "The label for link '指南总览' in sidebar 'aiAgentGuideSidebar', linking to '/ai-agent-engineering-guide'"
+  }
+}

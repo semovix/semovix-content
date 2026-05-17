@@ -3,6 +3,7 @@
   "position": 3,
   "link": {
     "type": "generated-index",
+    "slug": "llm-prompt-context",
     "description": "解释 Agent 的底层推理、行为指令和上下文工程基础。"
   }
 }
