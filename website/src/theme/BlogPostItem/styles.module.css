@@ -1,0 +1,201 @@
+/**
+ * Stylesheet for the modernized technical blog feed cards
+ * Matches the layout of agent-blog-homepage.html perfectly.
+ */
+
+.artCard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px 26px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s, transform 0.2s;
+  margin-bottom: 16px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.artCard::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+
+.artCard:hover {
+  border-color: var(--border2);
+  transform: translateX(4px);
+  background: var(--surface2);
+}
+
+.artCard:hover::after {
+  opacity: 1;
+}
+
+/* Accent Color Variations */
+.ac-lime::after { background: var(--lime); }
+.ac-amber::after { background: var(--amber); }
+.ac-sky::after { background: var(--sky); }
+.ac-rose::after { background: var(--rose); }
+.ac-violet::after { background: var(--violet); }
+
+.artMetaTop {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.artTag {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 9px;
+  border-radius: 3px;
+  font-weight: 600;
+}
+
+.tag-lime {
+  background: var(--lime-dim);
+  color: var(--lime);
+  border: 1px solid rgba(184, 245, 60, 0.25);
+}
+
+.tag-amber {
+  background: var(--amber-dim);
+  color: var(--amber);
+  border: 1px solid rgba(245, 166, 35, 0.25);
+}
+
+.tag-sky {
+  background: var(--sky-dim);
+  color: var(--sky);
+  border: 1px solid rgba(56, 178, 240, 0.25);
+}
+
+.tag-rose {
+  background: var(--rose-dim);
+  color: var(--rose);
+  border: 1px solid rgba(240, 78, 110, 0.25);
+}
+
+.tag-violet {
+  background: var(--violet-dim);
+  color: var(--violet);
+  border: 1px solid rgba(155, 109, 255, 0.25);
+}
+
+.artDate {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+}
+
+.artTitle {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 700;
+  margin: 0;
+  line-height: 1.4;
+  letter-spacing: -0.01em;
+}
+
+.artTitle a {
+  color: var(--text) !important;
+  text-decoration: none !important;
+  transition: color 0.2s;
+}
+
+.artTitle a:hover {
+  color: var(--lime) !important;
+}
+
+.ac-lime .artTitle a:hover { color: var(--lime) !important; }
+.ac-amber .artTitle a:hover { color: var(--amber) !important; }
+.ac-sky .artTitle a:hover { color: var(--sky) !important; }
+.ac-rose .artTitle a:hover { color: var(--rose) !important; }
+.ac-violet .artTitle a:hover { color: var(--violet) !important; }
+
+.artExcerpt {
+  font-size: 13.5px;
+  color: var(--text2);
+  line-height: 1.7;
+  margin: 0;
+}
+
+.artFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid var(--border);
+  padding-top: 14px;
+  margin-top: 4px;
+}
+
+.artKws {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.artKw {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--text3);
+  background: var(--void2);
+  border: 1px solid var(--border);
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-decoration: none !important;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.artKw:hover {
+  border-color: var(--text2);
+  color: var(--text);
+}
+
+.artReading {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--text3);
+  white-space: nowrap;
+}
+
+/* ════════════════════════════════
+   LIGHT MODE OVERRIDES
+   ════════════════════════════════ */
+:global(html[data-theme='light']) .artCard {
+  background: #ffffff !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.03) !important;
+}
+
+:global(html[data-theme='light']) .artCard:hover {
+  background: #fdfdfd !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06) !important;
+}
+
+:global(html[data-theme='light']) .artKw {
+  background: #f7f8fa !important;
+  border-color: rgba(0, 0, 0, 0.06) !important;
+  color: #64748b !important;
+}
+
+:global(html[data-theme='light']) .artKw:hover {
+  border-color: #334155 !important;
+  color: #1e293b !important;
+}
+
+:global(html[data-theme='light']) .artFooter {
+  border-top-color: rgba(0, 0, 0, 0.06) !important;
+}
