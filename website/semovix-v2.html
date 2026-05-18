@@ -1,0 +1,2079 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Semovix｜企业级 AI Agent 工程化与语义治理平台</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@300;400;500&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+
+/* ═══════════════════════════════════════
+   TOKENS
+═══════════════════════════════════════ */
+:root {
+  --ink:       #06060f;
+  --ink-2:     #0c0c20;
+  --ink-3:     #12122e;
+  --rule:      rgba(255,255,255,0.07);
+  --rule-med:  rgba(255,255,255,0.12);
+  --frost:     rgba(255,255,255,0.04);
+  --white:     #ffffff;
+  --dim:       rgba(255,255,255,0.48);
+  --muted:     rgba(255,255,255,0.24);
+  --accent:    #3d5afe;
+  --accent-hi: #7986ff;
+  --violet:    #7c3aed;
+  --teal:      #06b6d4;
+  --mono:      'DM Mono', monospace;
+  --serif:     'DM Serif Display', serif;
+  --sans:      'Noto Sans SC', sans-serif;
+  --ease:      cubic-bezier(0.16,1,0.3,1);
+}
+
+*,*::before,*::after { box-sizing:border-box; margin:0; padding:0; }
+html { scroll-behavior:smooth; }
+
+body {
+  font-family: var(--sans);
+  background: var(--ink);
+  color: var(--white);
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── NOISE TEXTURE OVERLAY ─── */
+body::after {
+  content:'';
+  position:fixed;
+  inset:0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='1'/%3E%3C/svg%3E");
+  opacity: 0.022;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* ─── SCROLLBAR ─── */
+::-webkit-scrollbar { width:4px; }
+::-webkit-scrollbar-track { background:var(--ink); }
+::-webkit-scrollbar-thumb { background:rgba(61,90,254,0.4); border-radius:2px; }
+
+/* ═══════════════════════════════════════
+   NAV
+═══════════════════════════════════════ */
+nav {
+  position: fixed;
+  top:0; left:0; right:0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 48px;
+  height: 64px;
+  border-bottom: 1px solid var(--rule);
+  background: rgba(6,6,15,0.82);
+  backdrop-filter: blur(24px) saturate(160%);
+}
+
+.nav-left { display:flex; align-items:center; gap:32px; }
+
+.logo {
+  display:flex; align-items:center; gap:10px;
+  text-decoration:none;
+}
+.logo img { height:28px; width:28px; object-fit:contain; }
+.logo-text {
+  font-family: var(--mono);
+  font-size: 15px; font-weight:500;
+  letter-spacing: 0.06em;
+  color: var(--white);
+}
+
+.nav-sep { width:1px; height:20px; background:var(--rule-med); }
+
+.nav-links { display:flex; gap:0; list-style:none; }
+.nav-links a {
+  display:block;
+  padding: 0 16px;
+  font-family: var(--mono);
+  font-size: 12px; letter-spacing:0.08em;
+  color: var(--dim);
+  text-decoration:none;
+  line-height:64px;
+  transition: color 0.2s;
+  text-transform: uppercase;
+}
+.nav-links a:hover { color:#fff; }
+
+.nav-right { display:flex; align-items:center; gap:16px; }
+
+.nav-badge {
+  font-family: var(--mono);
+  font-size:11px; letter-spacing:0.08em;
+  color: var(--teal);
+  border: 1px solid rgba(6,182,212,0.3);
+  border-radius:3px;
+  padding:3px 8px;
+  text-transform:uppercase;
+}
+
+.nav-btn {
+  font-family: var(--mono);
+  font-size:12px; letter-spacing:0.08em;
+  color: var(--ink);
+  background: var(--white);
+  border:none; border-radius:4px;
+  padding:8px 18px;
+  cursor:pointer;
+  text-transform:uppercase;
+  transition: opacity 0.2s;
+}
+.nav-btn:hover { opacity:0.82; }
+
+/* ═══════════════════════════════════════
+   HERO
+═══════════════════════════════════════ */
+#hero {
+  position:relative;
+  min-height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  padding: 120px 48px 80px;
+  overflow:hidden;
+}
+
+/* Blueprint grid */
+.hero-grid {
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(61,90,254,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(61,90,254,0.06) 1px, transparent 1px),
+    linear-gradient(rgba(61,90,254,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(61,90,254,0.025) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+  mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, black 30%, transparent 100%);
+}
+
+/* Glow orbs */
+.orb {
+  position:absolute;
+  border-radius:50%;
+  pointer-events:none;
+  filter:blur(80px);
+}
+.orb-1 { width:600px; height:600px; background:rgba(61,90,254,0.14); top:-200px; left:-100px; }
+.orb-2 { width:500px; height:500px; background:rgba(124,58,237,0.10); top:100px; right:-150px; }
+.orb-3 { width:400px; height:400px; background:rgba(6,182,212,0.07); bottom:-100px; left:30%; }
+
+/* Loop diagram — top right decoration */
+.loop-diagram {
+  position:absolute;
+  right:80px;
+  top:50%;
+  transform:translateY(-50%);
+  width:360px;
+  height:360px;
+  z-index:1;
+}
+
+.loop-ring {
+  position:absolute;
+  border-radius:50%;
+  border:1px solid rgba(61,90,254,0.18);
+}
+.loop-ring-1 { inset:0; animation: spin 40s linear infinite; }
+.loop-ring-2 { inset:30px; border-color:rgba(124,58,237,0.15); animation: spin 28s linear infinite reverse; }
+.loop-ring-3 { inset:65px; border-color:rgba(6,182,212,0.12); animation: spin 20s linear infinite; }
+
+@keyframes spin { to { transform:rotate(360deg); } }
+
+.loop-ring::before {
+  content:'';
+  position:absolute;
+  width:6px; height:6px;
+  border-radius:50%;
+  top:-3px; left:50%;
+  margin-left:-3px;
+  background:currentColor;
+  box-shadow: 0 0 10px currentColor;
+}
+.loop-ring-1::before { color:var(--accent); }
+.loop-ring-2::before { color:var(--violet); }
+.loop-ring-3::before { color:var(--teal); }
+
+.loop-center {
+  position:absolute;
+  inset:100px;
+  border-radius:50%;
+  background:linear-gradient(135deg, rgba(61,90,254,0.15), rgba(124,58,237,0.1));
+  border:1px solid rgba(61,90,254,0.2);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-direction:column;
+  gap:4px;
+}
+
+.loop-xino-img {
+  width:95px;
+  height:95px;
+  object-fit:contain;
+  border-radius:50%;
+  filter:drop-shadow(0 0 16px rgba(61,90,254,0.5));
+  animation: breathe 4s ease-in-out infinite;
+}
+
+@keyframes breathe {
+  0%,100% { transform:scale(1); }
+  50% { transform:scale(1.04); }
+}
+
+/* Steps around the loop */
+.loop-step {
+  position:absolute;
+  font-family:var(--mono);
+  font-size:10px;
+  letter-spacing:0.1em;
+  text-transform:uppercase;
+}
+.loop-step span {
+  display:block;
+  font-size:9px;
+  color:var(--muted);
+  margin-top:1px;
+}
+.ls-1 { top:8px; left:50%; transform:translateX(-50%); text-align:center; color:var(--accent-hi); }
+.ls-2 { right:8px; top:38%; color:var(--violet); text-align:right; }
+.ls-3 { bottom:8px; left:50%; transform:translateX(-50%); text-align:center; color:var(--teal); }
+.ls-4 { left:8px; top:38%; color:#64748b; }
+
+/* Hero content */
+.hero-content {
+  position:relative;
+  z-index:2;
+  max-width:660px;
+}
+
+.hero-kicker {
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  font-family:var(--mono);
+  font-size:11px;
+  letter-spacing:0.14em;
+  text-transform:uppercase;
+  color:var(--teal);
+  margin-bottom:32px;
+}
+.hero-kicker::before {
+  content:'';
+  width:24px; height:1px;
+  background:var(--teal);
+  opacity:0.6;
+}
+
+.hero-h1 {
+  font-family: var(--serif);
+  font-size: clamp(52px, 6vw, 86px);
+  line-height: 1.0;
+  letter-spacing:-0.01em;
+  margin-bottom: 10px;
+}
+
+.hero-h1 em {
+  font-style:italic;
+  background: linear-gradient(135deg, var(--accent-hi) 0%, #a78bfa 60%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.hero-h1-cn {
+  font-family:var(--sans);
+  font-size:clamp(18px,2vw,26px);
+  font-weight:300;
+  color:var(--dim);
+  letter-spacing:0.12em;
+  margin-bottom:28px;
+}
+
+.hero-tagline {
+  font-size:16px;
+  line-height:1.8;
+  color:var(--dim);
+  margin-bottom:44px;
+  max-width:520px;
+}
+
+.hero-tagline strong { color:#fff; font-weight:500; }
+
+.hero-actions { display:flex; gap:12px; align-items:center; margin-bottom:60px; }
+
+.btn-solid {
+  font-family:var(--mono);
+  font-size:12px; letter-spacing:0.1em; text-transform:uppercase;
+  color:#fff;
+  background:var(--accent);
+  border:1px solid var(--accent);
+  border-radius:4px;
+  padding:12px 28px;
+  cursor:pointer;
+  transition:background 0.2s, transform 0.2s;
+}
+.btn-solid:hover { background:#2a3fd4; transform:translateY(-1px); }
+
+.btn-outline {
+  font-family:var(--mono);
+  font-size:12px; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--dim);
+  background:transparent;
+  border:1px solid var(--rule-med);
+  border-radius:4px;
+  padding:12px 28px;
+  cursor:pointer;
+  transition:border-color 0.2s, color 0.2s;
+}
+.btn-outline:hover { border-color:rgba(255,255,255,0.3); color:#fff; }
+
+/* Execution loop counter */
+.hero-stats {
+  display:flex;
+  gap:40px;
+  padding-top:32px;
+  border-top:1px solid var(--rule);
+}
+
+.stat-item { }
+.stat-n {
+  font-family:var(--serif);
+  font-size:32px;
+  background:linear-gradient(135deg, #fff 30%, var(--accent-hi));
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+  line-height:1;
+  margin-bottom:4px;
+}
+.stat-l {
+  font-family:var(--mono);
+  font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--muted);
+}
+
+/* ═══════════════════════════════════════
+   EXECUTION LOOP TICKER
+═══════════════════════════════════════ */
+.ticker-bar {
+  border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+  padding:14px 0;
+  overflow:hidden;
+  background:rgba(61,90,254,0.04);
+  position:relative;
+  z-index:1;
+}
+
+.ticker-track {
+  display:flex;
+  gap:0;
+  white-space:nowrap;
+  animation: ticker 30s linear infinite;
+}
+
+.ticker-track:hover { animation-play-state:paused; }
+
+@keyframes ticker {
+  from { transform:translateX(0); }
+  to { transform:translateX(-50%); }
+}
+
+.ticker-item {
+  display:inline-flex;
+  align-items:center;
+  gap:10px;
+  padding:0 36px;
+  font-family:var(--mono);
+  font-size:12px; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--dim);
+  flex-shrink:0;
+}
+.ticker-item::after {
+  content:'·';
+  color:var(--accent);
+  font-size:20px;
+  line-height:1;
+}
+
+.ticker-n {
+  color:var(--accent-hi);
+  font-weight:500;
+}
+
+/* ═══════════════════════════════════════
+   SECTION SHARED
+═══════════════════════════════════════ */
+.section { padding:120px 48px; position:relative; }
+
+.section-eyebrow {
+  font-family:var(--mono);
+  font-size:11px; letter-spacing:0.16em; text-transform:uppercase;
+  color:var(--accent-hi);
+  margin-bottom:18px;
+  display:flex; align-items:center; gap:10px;
+}
+.section-eyebrow::before {
+  content:'';
+  width:20px; height:1px;
+  background:var(--accent-hi); opacity:0.5;
+}
+
+.section-h2 {
+  font-family:var(--serif);
+  font-size:clamp(36px,4vw,58px);
+  line-height:1.1;
+  letter-spacing:-0.01em;
+  margin-bottom:16px;
+}
+
+.section-lead {
+  font-size:16px;
+  line-height:1.8;
+  color:var(--dim);
+  max-width:540px;
+}
+
+/* Reveal animation */
+.r {
+  opacity:0;
+  transform:translateY(24px);
+  transition:opacity 0.7s var(--ease), transform 0.7s var(--ease);
+}
+.r.in { opacity:1; transform:none; }
+.r.d1 { transition-delay:0.08s; }
+.r.d2 { transition-delay:0.16s; }
+.r.d3 { transition-delay:0.24s; }
+.r.d4 { transition-delay:0.32s; }
+.r.d5 { transition-delay:0.40s; }
+
+/* ═══════════════════════════════════════
+   PROBLEMS
+═══════════════════════════════════════ */
+#problems {
+  background: linear-gradient(180deg, var(--ink) 0%, var(--ink-2) 100%);
+}
+
+.problems-layout {
+  display:grid;
+  grid-template-columns:380px 1fr;
+  gap:80px;
+  align-items:start;
+  margin-top:64px;
+}
+
+.problems-sticky { position:sticky; top:100px; }
+
+.problems-quote {
+  font-family:var(--serif);
+  font-size:22px;
+  line-height:1.5;
+  color:rgba(255,255,255,0.75);
+  border-left:2px solid var(--accent);
+  padding-left:24px;
+  margin-top:32px;
+}
+
+.problem-list { display:flex; flex-direction:column; gap:1px; }
+
+.problem-row {
+  display:grid;
+  grid-template-columns:56px 1fr;
+  gap:24px;
+  align-items:start;
+  padding:32px 0;
+  border-bottom:1px solid var(--rule);
+  transition:background 0.3s;
+  cursor:default;
+}
+.problem-row:first-child { border-top:1px solid var(--rule); }
+.problem-row:hover { background:var(--frost); padding-left:12px; margin-left:-12px; padding-right:12px; }
+
+.prob-num {
+  font-family:var(--serif);
+  font-size:42px;
+  color:rgba(61,90,254,0.18);
+  line-height:1;
+  margin-top:4px;
+}
+
+.prob-title {
+  font-size:18px; font-weight:700;
+  margin-bottom:10px; line-height:1.3;
+}
+
+.prob-body {
+  font-size:14px; color:var(--dim); line-height:1.8;
+}
+
+/* ═══════════════════════════════════════
+   LOOP SECTION (Execution Steps)
+═══════════════════════════════════════ */
+#loop {
+  background:var(--ink-2);
+  border-top:1px solid var(--rule);
+  border-bottom:1px solid var(--rule);
+  overflow:hidden;
+}
+
+.loop-header {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:60px;
+  align-items:end;
+  margin-bottom:72px;
+}
+
+.steps-flow {
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:0;
+  position:relative;
+}
+
+.steps-flow::before {
+  content:'';
+  position:absolute;
+  top:28px; left:28px; right:28px;
+  height:1px;
+  background:linear-gradient(90deg, var(--accent) 0%, var(--violet) 50%, var(--teal) 100%);
+  opacity:0.3;
+}
+
+.step-node {
+  display:flex; flex-direction:column; align-items:center;
+  gap:14px;
+  position:relative;
+  z-index:1;
+}
+
+.step-dot {
+  width:56px; height:56px;
+  border-radius:50%;
+  border:1px solid var(--rule-med);
+  display:flex; align-items:center; justify-content:center;
+  background:var(--ink-3);
+  font-family:var(--mono);
+  font-size:11px; letter-spacing:0.06em;
+  color:var(--muted);
+  transition:all 0.3s;
+  cursor:default;
+}
+.step-node:hover .step-dot {
+  border-color:var(--accent);
+  color:var(--accent-hi);
+  box-shadow:0 0 24px rgba(61,90,254,0.25);
+  background:rgba(61,90,254,0.1);
+}
+
+.step-label {
+  font-family:var(--mono);
+  font-size:10px; letter-spacing:0.1em;
+  text-align:center; color:var(--muted);
+  text-transform:uppercase;
+  line-height:1.4;
+}
+.step-node:hover .step-label { color:var(--dim); }
+
+.step-sublabel {
+  font-family:var(--mono);
+  font-size:9px; letter-spacing:0.06em;
+  text-align:center; color:rgba(255,255,255,0.14);
+  text-transform:uppercase;
+  line-height:1.4;
+  margin-top:-10px;
+}
+
+/* Loop attributes row */
+.loop-attrs {
+  display:flex;
+  gap:0;
+  margin-top:56px;
+  border:1px solid var(--rule);
+  border-radius:6px;
+  overflow:hidden;
+}
+
+.loop-attr {
+  flex:1;
+  padding:20px 24px;
+  border-right:1px solid var(--rule);
+  transition:background 0.3s;
+}
+.loop-attr:last-child { border-right:none; }
+.loop-attr:hover { background:var(--frost); }
+
+.attr-mark {
+  font-family:var(--mono);
+  font-size:18px;
+  color:var(--accent-hi);
+  margin-bottom:8px;
+}
+
+.attr-label {
+  font-family:var(--mono);
+  font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--dim);
+  margin-bottom:4px;
+}
+
+.attr-desc {
+  font-size:13px; color:var(--muted); line-height:1.6;
+}
+
+/* ═══════════════════════════════════════
+   CAPABILITIES — 4 PILLARS
+═══════════════════════════════════════ */
+#capabilities { background:var(--ink); }
+
+.caps-header {
+  margin-bottom:72px;
+}
+
+.caps-grid {
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:1px;
+  background:var(--rule);
+  border:1px solid var(--rule);
+  border-radius:8px;
+  overflow:hidden;
+}
+
+.cap-cell {
+  background:var(--ink);
+  padding:44px 40px;
+  position:relative;
+  overflow:hidden;
+  transition:background 0.3s;
+  cursor:default;
+}
+.cap-cell:hover { background:var(--ink-2); }
+
+.cap-cell::before {
+  content:'';
+  position:absolute;
+  top:0; left:0; right:0;
+  height:2px;
+  opacity:0;
+  transition:opacity 0.3s;
+}
+.cap-cell:nth-child(1)::before { background:linear-gradient(90deg, var(--accent), var(--violet)); }
+.cap-cell:nth-child(2)::before { background:linear-gradient(90deg, var(--violet), var(--teal)); }
+.cap-cell:nth-child(3)::before { background:linear-gradient(90deg, var(--teal), var(--accent)); }
+.cap-cell:nth-child(4)::before { background:linear-gradient(90deg, var(--accent), #f43f5e); }
+.cap-cell:hover::before { opacity:1; }
+
+.cap-index {
+  font-family:var(--mono);
+  font-size:10px; letter-spacing:0.14em; text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:20px;
+}
+
+.cap-icon-row {
+  display:flex; align-items:center; gap:12px;
+  margin-bottom:18px;
+}
+
+.cap-icon-box {
+  width:40px; height:40px;
+  border-radius:6px;
+  border:1px solid var(--rule-med);
+  display:flex; align-items:center; justify-content:center;
+  font-size:18px;
+  background:var(--frost);
+}
+
+.cap-tag-en {
+  font-family:var(--mono);
+  font-size:11px; letter-spacing:0.08em;
+  color:var(--accent-hi);
+  text-transform:uppercase;
+}
+
+.cap-h3 {
+  font-family:var(--serif);
+  font-size:26px;
+  line-height:1.2;
+  margin-bottom:14px;
+}
+
+.cap-body {
+  font-size:14px; color:var(--dim); line-height:1.8;
+  margin-bottom:24px;
+}
+
+.cap-chips {
+  display:flex; flex-wrap:wrap; gap:6px;
+}
+.cap-chip {
+  font-family:var(--mono);
+  font-size:10px; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--muted);
+  border:1px solid var(--rule);
+  border-radius:3px;
+  padding:3px 10px;
+  transition:border-color 0.2s, color 0.2s;
+}
+.cap-cell:hover .cap-chip {
+  border-color:rgba(61,90,254,0.3);
+  color:var(--accent-hi);
+}
+
+/* ═══════════════════════════════════════
+   VALUES
+═══════════════════════════════════════ */
+#values {
+  background:var(--ink-2);
+  border-top:1px solid var(--rule);
+}
+
+.values-layout {
+  display:grid;
+  grid-template-columns:280px 1fr;
+  gap:80px;
+  align-items:start;
+}
+
+.values-left { position:sticky; top:100px; }
+
+.values-right {
+  display:flex;
+  flex-direction:column;
+  gap:1px;
+}
+
+.value-row {
+  display:grid;
+  grid-template-columns:200px 1fr;
+  gap:40px;
+  align-items:start;
+  padding:32px 0;
+  border-bottom:1px solid var(--rule);
+  position:relative;
+}
+.value-row:first-child { border-top:1px solid var(--rule); }
+
+.value-row::before {
+  content:'';
+  position:absolute;
+  left:0; top:0; bottom:0;
+  width:2px;
+  background:linear-gradient(180deg, var(--accent), var(--violet));
+  opacity:0;
+  transition:opacity 0.3s;
+}
+.value-row:hover::before { opacity:1; }
+
+.value-kw {
+  font-family:var(--serif);
+  font-size:28px;
+  line-height:1;
+  margin-bottom:4px;
+}
+
+.value-en {
+  font-family:var(--mono);
+  font-size:10px; letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--muted);
+}
+
+.value-desc {
+  font-size:15px; color:var(--dim); line-height:1.8;
+  padding-top:4px;
+}
+
+/* ═══════════════════════════════════════
+   COMPARE TABLE
+═══════════════════════════════════════ */
+#compare { background:var(--ink); }
+
+.compare-wrap { margin-top:60px; overflow:hidden; border-radius:8px; border:1px solid var(--rule); }
+
+table { width:100%; border-collapse:collapse; }
+
+thead tr {
+  background:var(--ink-3);
+}
+
+th {
+  padding:16px 24px;
+  text-align:left;
+  font-family:var(--mono);
+  font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
+  border-bottom:1px solid var(--rule);
+}
+
+th:first-child { color:var(--muted); width:180px; }
+th:nth-child(2) { color:var(--dim); }
+th.semovix-col {
+  color:var(--accent-hi);
+  background:rgba(61,90,254,0.08);
+  border-left:1px solid rgba(61,90,254,0.2);
+}
+
+td {
+  padding:16px 24px;
+  font-size:14px;
+  border-bottom:1px solid var(--rule);
+  color:var(--dim);
+  vertical-align:middle;
+}
+tr:last-child td { border-bottom:none; }
+
+td:first-child {
+  font-family:var(--mono);
+  font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--muted);
+}
+
+td.semovix-col {
+  color:#fff;
+  font-weight:500;
+  background:rgba(61,90,254,0.06);
+  border-left:1px solid rgba(61,90,254,0.15);
+}
+
+tr:hover td { background:var(--frost); }
+tr:hover td.semovix-col { background:rgba(61,90,254,0.1); }
+
+/* ═══════════════════════════════════════
+   ARCHITECTURE
+═══════════════════════════════════════ */
+#arch {
+  background:var(--ink-2);
+  border-top:1px solid var(--rule);
+}
+
+.arch-layout {
+  display:grid;
+  grid-template-columns:1fr 480px;
+  gap:80px;
+  align-items:start;
+  margin-top:60px;
+}
+
+.arch-layers-stack { display:flex; flex-direction:column; }
+
+.arch-layer {
+  display:grid;
+  grid-template-columns:100px 1fr;
+  gap:0;
+  border:1px solid var(--rule);
+  border-bottom:none;
+  position:relative;
+  transition:background 0.2s;
+}
+.arch-layer:first-child { border-radius:6px 6px 0 0; }
+.arch-layer:last-child { border-bottom:1px solid var(--rule); border-radius:0 0 6px 6px; }
+.arch-layer:hover { background:var(--frost); }
+
+.arch-layer-num {
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono);
+  font-size:11px; letter-spacing:0.1em; color:var(--muted);
+  border-right:1px solid var(--rule);
+  padding:20px;
+  background:rgba(0,0,0,0.15);
+}
+
+.arch-layer.hl .arch-layer-num {
+  background:rgba(61,90,254,0.1);
+  color:var(--accent-hi);
+}
+
+.arch-layer-body { padding:20px 28px; }
+
+.arch-layer-name {
+  font-family:var(--mono);
+  font-size:12px; letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--dim);
+  margin-bottom:4px;
+}
+.arch-layer.hl .arch-layer-name { color:var(--accent-hi); }
+
+.arch-layer-items {
+  font-size:13px; color:var(--muted); line-height:1.6;
+}
+.arch-layer.hl .arch-layer-items { color:var(--dim); }
+
+/* Arch right: knowledge network visual */
+.kn-visual {
+  position:sticky;
+  top:100px;
+}
+
+.kn-title {
+  font-family:var(--mono);
+  font-size:11px; letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:24px;
+}
+
+.kn-nodes {
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+.kn-node {
+  display:flex; align-items:center; gap:16px;
+  padding:16px 20px;
+  border:1px solid var(--rule);
+  border-radius:6px;
+  background:var(--frost);
+  transition:border-color 0.3s, background 0.3s;
+  cursor:default;
+}
+.kn-node:hover {
+  border-color:rgba(61,90,254,0.3);
+  background:rgba(61,90,254,0.06);
+}
+
+.kn-node-dot {
+  width:8px; height:8px;
+  border-radius:50%;
+  flex-shrink:0;
+}
+.kn-node:nth-child(1) .kn-node-dot { background:var(--accent); box-shadow:0 0 8px var(--accent); }
+.kn-node:nth-child(2) .kn-node-dot { background:var(--violet); box-shadow:0 0 8px var(--violet); }
+.kn-node:nth-child(3) .kn-node-dot { background:var(--teal); box-shadow:0 0 8px var(--teal); }
+
+.kn-node-label {
+  font-family:var(--mono);
+  font-size:13px; font-weight:500;
+  color:#fff;
+  margin-bottom:2px;
+}
+.kn-node-desc { font-size:12px; color:var(--muted); }
+
+.kn-connector {
+  width:1px; height:12px;
+  background:linear-gradient(180deg, rgba(61,90,254,0.4), rgba(124,58,237,0.4));
+  margin-left:23px;
+}
+
+/* ═══════════════════════════════════════
+   XINO
+═══════════════════════════════════════ */
+#xino {
+  background:var(--ink);
+  border-top:1px solid var(--rule);
+  overflow:hidden;
+  position:relative;
+}
+
+#xino .bg-xino-glow {
+  position:absolute;
+  right:-100px; top:50%;
+  transform:translateY(-50%);
+  width:700px; height:700px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(124,58,237,0.1) 0%, transparent 70%);
+  pointer-events:none;
+}
+
+.xino-layout {
+  display:grid;
+  grid-template-columns:1fr 420px;
+  gap:80px;
+  align-items:center;
+}
+
+.xino-verbs {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:1px;
+  background:var(--rule);
+  border:1px solid var(--rule);
+  border-radius:8px;
+  overflow:hidden;
+  margin-top:48px;
+}
+
+.xino-verb-cell {
+  background:var(--ink);
+  padding:28px;
+  transition:background 0.3s;
+  cursor:default;
+}
+.xino-verb-cell:hover { background:var(--ink-2); }
+
+.verb-en {
+  font-family:var(--serif);
+  font-style:italic;
+  font-size:20px;
+  color:var(--accent-hi);
+  margin-bottom:4px;
+}
+
+.verb-cn {
+  font-family:var(--mono);
+  font-size:11px; letter-spacing:0.12em; text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:12px;
+}
+
+.verb-desc { font-size:13px; color:var(--dim); line-height:1.7; }
+
+.xino-right { position:relative; display:flex; justify-content:center; }
+
+.xino-frame {
+  width:360px;
+  border:1px solid var(--rule-med);
+  border-radius:12px;
+  background:var(--ink-2);
+  overflow:hidden;
+  box-shadow:0 40px 80px rgba(0,0,0,0.5);
+}
+
+.xino-frame-header {
+  padding:14px 18px;
+  border-bottom:1px solid var(--rule);
+  display:flex; align-items:center; gap:10px;
+  background:var(--ink-3);
+}
+.xino-frame-dots { display:flex; gap:6px; }
+.xino-frame-dots span {
+  width:10px; height:10px;
+  border-radius:50%;
+  background:var(--rule-med);
+}
+
+.xino-frame-title {
+  font-family:var(--mono);
+  font-size:11px; letter-spacing:0.08em;
+  color:var(--muted);
+  text-transform:uppercase;
+}
+
+.xino-frame-body { padding:20px; }
+
+.xino-chat { display:flex; flex-direction:column; gap:12px; }
+
+.chat-row {
+  display:flex;
+  gap:10px;
+  align-items:flex-start;
+}
+
+.chat-avatar {
+  width:28px; height:28px;
+  border-radius:50%;
+  overflow:hidden;
+  flex-shrink:0;
+  border:1px solid var(--rule-med);
+  background:rgba(61,90,254,0.15);
+  display:flex; align-items:center; justify-content:center;
+}
+.chat-avatar img { width:100%; height:100%; object-fit:cover; }
+
+.chat-bubble {
+  background:var(--ink-3);
+  border:1px solid var(--rule);
+  border-radius:8px;
+  padding:10px 14px;
+  font-size:12px;
+  line-height:1.6;
+  color:var(--dim);
+  max-width:260px;
+}
+
+.chat-row.user .chat-bubble {
+  background:rgba(61,90,254,0.12);
+  border-color:rgba(61,90,254,0.2);
+  color:#fff;
+  margin-left:auto;
+}
+.chat-row.user { flex-direction:row-reverse; }
+
+.chat-status {
+  font-family:var(--mono);
+  font-size:10px; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--teal);
+  display:flex; align-items:center; gap:6px;
+  padding:4px 0;
+}
+.chat-status::before {
+  content:'';
+  width:6px; height:6px;
+  border-radius:50%;
+  background:var(--teal);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity:1; }
+  50% { opacity:0.3; }
+}
+
+.task-card {
+  background:rgba(61,90,254,0.06);
+  border:1px solid rgba(61,90,254,0.18);
+  border-radius:8px;
+  padding:12px 14px;
+  margin-top:4px;
+}
+.task-card-h {
+  font-family:var(--mono);
+  font-size:10px; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--accent-hi);
+  margin-bottom:8px;
+}
+.task-item {
+  display:flex; align-items:center; gap:8px;
+  font-size:12px; color:var(--dim);
+  padding:4px 0;
+  border-bottom:1px solid var(--rule);
+}
+.task-item:last-child { border-bottom:none; padding-bottom:0; }
+.task-check { color:var(--teal); font-size:10px; }
+.task-pending { color:var(--accent-hi); font-size:10px; }
+
+.xino-quote-block {
+  margin-top:48px;
+  padding:28px 32px;
+  border-left:2px solid var(--accent);
+  background:rgba(61,90,254,0.04);
+  border-radius:0 6px 6px 0;
+}
+
+.xino-quote-text {
+  font-family:var(--serif);
+  font-size:20px;
+  line-height:1.5;
+  color:rgba(255,255,255,0.8);
+  margin-bottom:12px;
+}
+
+.xino-quote-attr {
+  font-family:var(--mono);
+  font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--muted);
+}
+
+/* ═══════════════════════════════════════
+   BLOG PREVIEW
+═══════════════════════════════════════ */
+#content {
+  background:var(--ink-2);
+  border-top:1px solid var(--rule);
+}
+
+.content-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr;
+  gap:1px;
+  background:var(--rule);
+  border:1px solid var(--rule);
+  border-radius:8px;
+  overflow:hidden;
+  margin-top:60px;
+}
+
+.content-card {
+  background:var(--ink-2);
+  padding:36px;
+  transition:background 0.3s;
+  text-decoration:none;
+  color:inherit;
+  display:block;
+  cursor:pointer;
+}
+.content-card:hover { background:var(--ink-3); }
+
+.card-cat {
+  font-family:var(--mono);
+  font-size:10px; letter-spacing:0.14em; text-transform:uppercase;
+  color:var(--accent-hi);
+  margin-bottom:14px;
+  display:flex; align-items:center; gap:8px;
+}
+.card-cat::before {
+  content:'';
+  width:14px; height:1px;
+  background:var(--accent-hi); opacity:0.5;
+}
+
+.card-h3 {
+  font-family:var(--serif);
+  font-size:22px;
+  line-height:1.25;
+  margin-bottom:12px;
+}
+
+.card-body { font-size:13px; color:var(--dim); line-height:1.75; }
+
+.card-meta {
+  display:flex; align-items:center; gap:12px;
+  margin-top:20px;
+  font-family:var(--mono);
+  font-size:10px; letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--muted);
+}
+.card-arrow { margin-left:auto; color:var(--accent-hi); font-size:16px; }
+
+/* ═══════════════════════════════════════
+   INSIGHT BLOCK
+═══════════════════════════════════════ */
+.insight-block {
+  margin-top:1px;
+  background:rgba(61,90,254,0.04);
+  border:1px solid rgba(61,90,254,0.15);
+  border-radius:6px;
+  padding:40px 48px;
+  position:relative;
+  overflow:hidden;
+}
+
+.insight-block::before {
+  content: '"';
+  position:absolute;
+  right:40px; top:-20px;
+  font-family:var(--serif);
+  font-size:180px;
+  color:rgba(61,90,254,0.06);
+  line-height:1;
+  pointer-events:none;
+}
+
+.insight-text {
+  font-family:var(--serif);
+  font-size:clamp(20px,2.2vw,28px);
+  line-height:1.5;
+  color:rgba(255,255,255,0.85);
+  max-width:680px;
+}
+
+.insight-attr {
+  font-family:var(--mono);
+  font-size:11px; letter-spacing:0.1em; text-transform:uppercase;
+  color:var(--muted);
+  margin-top:20px;
+}
+
+/* ═══════════════════════════════════════
+   CTA
+═══════════════════════════════════════ */
+#cta {
+  background:var(--ink);
+  border-top:1px solid var(--rule);
+  text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+
+.cta-bg {
+  position:absolute;
+  inset:0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 100%, rgba(61,90,254,0.12) 0%, transparent 100%);
+  pointer-events:none;
+}
+
+.cta-content { position:relative; z-index:1; }
+
+.cta-h2 {
+  font-family:var(--serif);
+  font-size:clamp(40px,5vw,72px);
+  line-height:1.05;
+  letter-spacing:-0.01em;
+  margin-bottom:20px;
+}
+
+.cta-h2 em {
+  font-style:italic;
+  background:linear-gradient(135deg, var(--accent-hi), #a78bfa);
+  -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text;
+}
+
+.cta-sub {
+  font-size:16px; color:var(--dim); line-height:1.8;
+  max-width:480px; margin:0 auto 48px;
+}
+
+/* ═══════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════ */
+footer {
+  border-top:1px solid var(--rule);
+  padding:32px 48px;
+  display:grid;
+  grid-template-columns:1fr auto 1fr;
+  align-items:center;
+  gap:24px;
+}
+
+.footer-left { display:flex; align-items:center; gap:12px; }
+.footer-logo { display:flex; align-items:center; gap:8px; }
+.footer-logo img { height:22px; }
+.footer-logo-text {
+  font-family:var(--mono);
+  font-size:13px; color:rgba(255,255,255,0.5);
+  letter-spacing:0.06em;
+}
+
+.footer-center {
+  font-family:var(--mono);
+  font-size:11px; color:var(--muted);
+  letter-spacing:0.08em; text-transform:uppercase;
+  text-align:center;
+}
+
+.footer-right {
+  display:flex; gap:24px; justify-content:flex-end;
+}
+.footer-right a {
+  font-family:var(--mono);
+  font-size:11px; letter-spacing:0.08em; text-transform:uppercase;
+  color:var(--muted);
+  text-decoration:none;
+  transition:color 0.2s;
+}
+.footer-right a:hover { color:#fff; }
+
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
+@media (max-width:900px) {
+  nav { padding:0 20px; }
+  .nav-links, .nav-badge { display:none; }
+  .section { padding:80px 24px; }
+  #hero { padding:100px 24px 60px; }
+  .loop-diagram { display:none; }
+  .problems-layout { grid-template-columns:1fr; gap:40px; }
+  .problems-sticky { position:static; }
+  .loop-header { grid-template-columns:1fr; }
+  .steps-flow { grid-template-columns:repeat(4,1fr); }
+  .steps-flow .step-node:nth-child(n+5) { display:none; }
+  .caps-grid { grid-template-columns:1fr; }
+  .values-layout { grid-template-columns:1fr; }
+  .arch-layout { grid-template-columns:1fr; }
+  .kn-visual { position:static; }
+  .xino-layout { grid-template-columns:1fr; }
+  .xino-frame { display:none; }
+  .content-grid { grid-template-columns:1fr; }
+  footer { grid-template-columns:1fr; gap:16px; }
+  .footer-right { justify-content:flex-start; }
+}
+
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <div class="nav-left">
+    <a class="logo" href="#">
+      <img src="/mnt/user-data/uploads/semovix-logo.png" alt="Semovix">
+      <span class="logo-text">SEMOVIX</span>
+    </a>
+    <div class="nav-sep"></div>
+    <ul class="nav-links">
+      <li><a href="#problems">痛点</a></li>
+      <li><a href="#loop">执行闭环</a></li>
+      <li><a href="#capabilities">核心能力</a></li>
+      <li><a href="#arch">架构</a></li>
+      <li><a href="#xino">Xino</a></li>
+      <li><a href="#content">洞察</a></li>
+    </ul>
+  </div>
+  <div class="nav-right">
+    <span class="nav-badge">Enterprise</span>
+    <button class="nav-btn">预约演示</button>
+  </div>
+</nav>
+
+<!-- ── HERO ── -->
+<section id="hero">
+  <div class="hero-grid"></div>
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+
+  <!-- Execution loop diagram -->
+  <div class="loop-diagram r d4">
+    <div class="loop-ring loop-ring-1"></div>
+    <div class="loop-ring loop-ring-2"></div>
+    <div class="loop-ring loop-ring-3"></div>
+    <div class="loop-center">
+      <img class="loop-xino-img" src="/mnt/user-data/uploads/欢迎.png" alt="Xino">
+    </div>
+    <div class="loop-step ls-1">Semantic<span>语义理解</span></div>
+    <div class="loop-step ls-2">Execute<span>智能执行</span></div>
+    <div class="loop-step ls-3">Artifact<span>结果交付</span></div>
+    <div class="loop-step ls-4">Audit<span>审计追踪</span></div>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-kicker r">Enterprise AI Agent Platform</div>
+
+    <h1 class="hero-h1 r d1">
+      <em>Semovix</em><br>
+      赛慕维
+    </h1>
+    <p class="hero-h1-cn r d1">数据语义治理与智能执行平台</p>
+
+    <p class="hero-tagline r d2">
+      不是让 AI <strong>回答你</strong>，而是让 AI <strong>真正参与工作</strong>。<br>
+      理解目标 · 判断路径 · 组织知识 · 发起任务 · 验证结果 · 交付成果
+    </p>
+
+    <div class="hero-actions r d3">
+      <button class="btn-solid">预约演示</button>
+      <button class="btn-outline">阅读技术指南 →</button>
+    </div>
+
+    <div class="hero-stats r d4">
+      <div class="stat-item">
+        <div class="stat-n">99.4%</div>
+        <div class="stat-l">语义准确率</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-n">2.4M</div>
+        <div class="stat-l">调用规模</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-n">7</div>
+        <div class="stat-l">架构层次</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-n">11</div>
+        <div class="stat-l">工程化章节</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TICKER ── -->
+<div class="ticker-bar">
+  <div class="ticker-track">
+    <!-- set 1 -->
+    <div class="ticker-item">AI Agent 工程化</div>
+    <div class="ticker-item">语义治理 <span class="ticker-n">Semantic Governance</span></div>
+    <div class="ticker-item">Skill · Tool · MCP</div>
+    <div class="ticker-item">Agent Harness <span class="ticker-n">Task Engine</span></div>
+    <div class="ticker-item">BKN · DKN · PKN</div>
+    <div class="ticker-item">可信执行 <span class="ticker-n">Trustworthy Execution</span></div>
+    <div class="ticker-item">AI Workbench</div>
+    <div class="ticker-item">找数问数 <span class="ticker-n">Data Intelligence</span></div>
+    <div class="ticker-item">OpenClaw Runtime</div>
+    <div class="ticker-item">可解释语义理解</div>
+    <!-- set 2 (duplicate for seamless) -->
+    <div class="ticker-item">AI Agent 工程化</div>
+    <div class="ticker-item">语义治理 <span class="ticker-n">Semantic Governance</span></div>
+    <div class="ticker-item">Skill · Tool · MCP</div>
+    <div class="ticker-item">Agent Harness <span class="ticker-n">Task Engine</span></div>
+    <div class="ticker-item">BKN · DKN · PKN</div>
+    <div class="ticker-item">可信执行 <span class="ticker-n">Trustworthy Execution</span></div>
+    <div class="ticker-item">AI Workbench</div>
+    <div class="ticker-item">找数问数 <span class="ticker-n">Data Intelligence</span></div>
+    <div class="ticker-item">OpenClaw Runtime</div>
+    <div class="ticker-item">可解释语义理解</div>
+  </div>
+</div>
+
+<!-- ── PROBLEMS ── -->
+<section id="problems" class="section">
+  <div class="problems-layout">
+    <div class="problems-sticky">
+      <div class="section-eyebrow r">Core Problem</div>
+      <h2 class="section-h2 r d1">组织真正<br>面临的困境</h2>
+      <p class="section-lead r d2">今天很多组织并不缺系统，也不缺数据，缺的是让这一切真正协同运转的能力。</p>
+      <blockquote class="problems-quote r d3">
+        Semovix 帮组织把"数据理顺、知识连起来、问题找出来、事情做下去"。
+      </blockquote>
+    </div>
+
+    <div class="problem-list">
+      <div class="problem-row r">
+        <div class="prob-num">01</div>
+        <div>
+          <div class="prob-title">数据很多，但业务没有真正看懂</div>
+          <div class="prob-body">表很多，字段很多，但没人能快速说清它们是什么。同一个业务概念在不同系统里叫法不同，指标口径不一致，越分析越容易争议，数据能存下来但很难形成组织级理解。</div>
+        </div>
+      </div>
+      <div class="problem-row r d1">
+        <div class="prob-num">02</div>
+        <div>
+          <div class="prob-title">知识很多，但没有被组织成可运行的网络</div>
+          <div class="prob-body">业务规则散落在文档、经验和系统里。领域知识没有和对象、指标、流程真正连接，场景能讲，但不能稳定运行、复用、交付。</div>
+        </div>
+      </div>
+      <div class="problem-row r d2">
+        <div class="prob-num">03</div>
+        <div>
+          <div class="prob-title">问题能发现，但不能顺畅推进</div>
+          <div class="prob-body">字段语义冲突、对象重复、映射不足、发布阻塞等问题散落各处。平台会"提示"，却没有真正把问题转成可推进的治理任务，用户需要自己找、自己记、自己判断下一步。</div>
+        </div>
+      </div>
+      <div class="problem-row r d3">
+        <div class="prob-num">04</div>
+        <div>
+          <div class="prob-title">AI 会回答，但不能把事情做完</div>
+          <div class="prob-body">普通 AI 能解释概念、生成文案，但组织真正需要的是：能判断任务意图、能调用 Skill / Tool、能在关键节点请求确认、能展示证据与审计结果、能失败重试并支持过程回放。</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── LOOP ── -->
+<section id="loop" class="section">
+  <div class="loop-header">
+    <div>
+      <div class="section-eyebrow r">Execution Loop</div>
+      <h2 class="section-h2 r d1">从语义到行动<br>的完整闭环</h2>
+    </div>
+    <p class="section-lead r d2">Semovix 的智能执行不是"生成完就结束"，而是整个链路都有可解释性和可追踪性。</p>
+  </div>
+
+  <div class="steps-flow r d1">
+    <div class="step-node">
+      <div class="step-dot">01</div>
+      <div class="step-label">Data<br>数据</div>
+    </div>
+    <div class="step-node">
+      <div class="step-dot">02</div>
+      <div class="step-label">Semantic<br>语义</div>
+    </div>
+    <div class="step-node">
+      <div class="step-dot">03</div>
+      <div class="step-label">Knowledge<br>知识</div>
+    </div>
+    <div class="step-node">
+      <div class="step-dot">04</div>
+      <div class="step-label">Task<br>任务</div>
+    </div>
+    <div class="step-node">
+      <div class="step-dot">05</div>
+      <div class="step-label">Execution<br>执行</div>
+    </div>
+    <div class="step-node">
+      <div class="step-dot">06</div>
+      <div class="step-label">Artifact<br>交付</div>
+    </div>
+    <div class="step-node">
+      <div class="step-dot">07</div>
+      <div class="step-label">Learning<br>沉淀</div>
+    </div>
+  </div>
+
+  <div class="loop-attrs r d2">
+    <div class="loop-attr">
+      <div class="attr-mark">◎</div>
+      <div class="attr-label">可执行</div>
+      <div class="attr-desc">任务驱动，每步可操作</div>
+    </div>
+    <div class="loop-attr">
+      <div class="attr-mark">◉</div>
+      <div class="attr-label">可审计</div>
+      <div class="attr-desc">证据链路，过程留存</div>
+    </div>
+    <div class="loop-attr">
+      <div class="attr-mark">↺</div>
+      <div class="attr-label">可恢复</div>
+      <div class="attr-desc">故障重试，状态可回放</div>
+    </div>
+    <div class="loop-attr">
+      <div class="attr-mark">⇌</div>
+      <div class="attr-label">可协作</div>
+      <div class="attr-desc">人工确认，团队共用</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CAPABILITIES ── -->
+<section id="capabilities" class="section">
+  <div class="caps-header">
+    <div class="section-eyebrow r">Core Capabilities</div>
+    <h2 class="section-h2 r d1">四条主线能力<br>覆盖企业级 Agent 全栈</h2>
+  </div>
+
+  <div class="caps-grid r d1">
+    <div class="cap-cell">
+      <div class="cap-index">Capability 01 · Agent Engineering</div>
+      <div class="cap-icon-row">
+        <div class="cap-icon-box">🔧</div>
+        <span class="cap-tag-en">AI Agent 工程化</span>
+      </div>
+      <h3 class="cap-h3">从模型调用<br>到任务执行闭环</h3>
+      <p class="cap-body">沉淀 Agent 基础认知、上下文组织、工具编排到任务执行闭环的完整工程方法。不停留在趋势叙事，而是围绕能力边界、系统架构、产品闭环和工程方法展开。</p>
+      <div class="cap-chips">
+        <span class="cap-chip">ReAct</span>
+        <span class="cap-chip">Function Calling</span>
+        <span class="cap-chip">Context Engineering</span>
+        <span class="cap-chip">Agent Loop</span>
+      </div>
+    </div>
+
+    <div class="cap-cell">
+      <div class="cap-index">Capability 02 · Semantic Governance</div>
+      <div class="cap-icon-row">
+        <div class="cap-icon-box">🗂️</div>
+        <span class="cap-tag-en">语义治理与找数问数</span>
+      </div>
+      <h3 class="cap-h3">可解释的<br>智能业务入口</h3>
+      <p class="cap-body">围绕企业数据语义、指标口径、知识层与执行层，建立可解释的智能业务入口。通过多维证据链计算与判断，让语义理解兼顾自动化效率与治理可信度。</p>
+      <div class="cap-chips">
+        <span class="cap-chip">业务对象</span>
+        <span class="cap-chip">指标口径</span>
+        <span class="cap-chip">BKN · DKN · PKN</span>
+        <span class="cap-chip">证据链</span>
+      </div>
+    </div>
+
+    <div class="cap-cell">
+      <div class="cap-index">Capability 03 · Skill / Tool / Runtime</div>
+      <div class="cap-icon-row">
+        <div class="cap-icon-box">⚡</div>
+        <span class="cap-tag-en">能力封装与复用</span>
+      </div>
+      <h3 class="cap-h3">从"会回答"<br>走向"能执行"</h3>
+      <p class="cap-body">把经验、流程与工具封装为能力资产，让 Agent 真正具备行动力。通过 Skill Registry 和 Skill Runtime 形成可沉淀、可复用、可持续演进的工程能力体系。</p>
+      <div class="cap-chips">
+        <span class="cap-chip">Skill Registry</span>
+        <span class="cap-chip">MCP 协议</span>
+        <span class="cap-chip">Tool Calling</span>
+        <span class="cap-chip">OpenClaw</span>
+      </div>
+    </div>
+
+    <div class="cap-cell">
+      <div class="cap-index">Capability 04 · Trustworthy Execution</div>
+      <div class="cap-icon-row">
+        <div class="cap-icon-box">🔐</div>
+        <span class="cap-tag-en">可信执行与可审计</span>
+      </div>
+      <h3 class="cap-h3">企业级生产<br>环境的智能执行</h3>
+      <p class="cap-body">通过验证、回放、审计、人工确认与结果工件，让智能执行进入企业级生产环境。权限控制不只是菜单可见性，而是人·入口·范围·动作·审计的五维闭环管理。</p>
+      <div class="cap-chips">
+        <span class="cap-chip">Harness</span>
+        <span class="cap-chip">Task Engine</span>
+        <span class="cap-chip">审计回放</span>
+        <span class="cap-chip">人工确认</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── VALUES ── -->
+<section id="values" class="section">
+  <div class="values-layout">
+    <div class="values-left">
+      <div class="section-eyebrow r">Core Values</div>
+      <h2 class="section-h2 r d1">五个关键词<br>一条完整路径</h2>
+      <p class="section-lead r d2">Semovix 将产品价值收口成五个清晰的关键词，覆盖从数据到行动的完整链路。</p>
+    </div>
+
+    <div class="values-right">
+      <div class="value-row r">
+        <div>
+          <div class="value-kw">看懂数据</div>
+          <div class="value-en">Understand Data</div>
+        </div>
+        <div class="value-desc">通过可解释语义理解，让系统真正知道字段、表、对象、口径在业务里意味着什么。降低人工梳理成本，减少误识别和口径污染。</div>
+      </div>
+      <div class="value-row r d1">
+        <div>
+          <div class="value-kw">组织知识</div>
+          <div class="value-en">Organize Knowledge</div>
+        </div>
+        <div class="value-desc">通过 BKN / DKN / PKN，把分散的数据、对象、指标、规则与场景组织成可复用知识网络。把知识从"静态资料"变成"运行中的业务能力"。</div>
+      </div>
+      <div class="value-row r d2">
+        <div>
+          <div class="value-kw">发现问题</div>
+          <div class="value-en">Detect Issues</div>
+        </div>
+        <div class="value-desc">通过语义冲突、对象重复、映射不足、发布阻塞等检测，让问题被及时暴露，而不是被埋没在各个系统的角落。</div>
+      </div>
+      <div class="value-row r d3">
+        <div>
+          <div class="value-kw">推进执行</div>
+          <div class="value-en">Drive Execution</div>
+        </div>
+        <div class="value-desc">通过 AI 工作台和 Task Engine，把问题变成可执行任务，而不是停留在提示层。把治理动作嵌入真实工作流。</div>
+      </div>
+      <div class="value-row r d4">
+        <div>
+          <div class="value-kw">形成闭环</div>
+          <div class="value-en">Close the Loop</div>
+        </div>
+        <div class="value-desc">通过任务状态、证据、交付物、回放和审计，让整个过程可追踪、可解释、可恢复。智能执行不是"生成完就结束"。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── COMPARE ── -->
+<section id="compare" class="section">
+  <div class="section-eyebrow r">Why Semovix</div>
+  <h2 class="section-h2 r d1">与普通 AI 工具<br>的根本区别</h2>
+
+  <div class="compare-wrap r d2">
+    <table>
+      <thead>
+        <tr>
+          <th>维度</th>
+          <th>普通 AI 问答工具</th>
+          <th class="semovix-col">Semovix｜赛慕维</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>输入方式</td>
+          <td>问一句，答一句</td>
+          <td class="semovix-col">自然语言触发完整任务</td>
+        </tr>
+        <tr>
+          <td>语义理解</td>
+          <td>基于上下文回答</td>
+          <td class="semovix-col">理解业务域、任务类型与执行模式</td>
+        </tr>
+        <tr>
+          <td>数据理解</td>
+          <td>通常不理解组织数据结构</td>
+          <td class="semovix-col">通过语义治理理解表、字段、对象、口径</td>
+        </tr>
+        <tr>
+          <td>知识体系</td>
+          <td>文本知识</td>
+          <td class="semovix-col">BKN / DKN / PKN 可运行知识网络</td>
+        </tr>
+        <tr>
+          <td>执行能力</td>
+          <td>生成内容为主</td>
+          <td class="semovix-col">Task Engine 驱动任务推进</td>
+        </tr>
+        <tr>
+          <td>权限控制</td>
+          <td>弱权限、弱审计</td>
+          <td class="semovix-col">角色·助手·范围·动作·门禁·审计</td>
+        </tr>
+        <tr>
+          <td>结果交付</td>
+          <td>一次性输出</td>
+          <td class="semovix-col">可验证、可回放、可交付</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ── ARCHITECTURE ── -->
+<section id="arch" class="section">
+  <div class="section-eyebrow r">Architecture</div>
+  <h2 class="section-h2 r d1">七层完整架构<br>主控与执行分离</h2>
+
+  <div class="arch-layout">
+    <div class="arch-layers-stack r d2">
+      <div class="arch-layer hl">
+        <div class="arch-layer-num">L1</div>
+        <div class="arch-layer-body">
+          <div class="arch-layer-name">交互层 · Interaction</div>
+          <div class="arch-layer-items">AI 工作台 + Xino · 自然语言输入 · 任务推荐 · 引导交互</div>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-layer-num">L2</div>
+        <div class="arch-layer-body">
+          <div class="arch-layer-name">入口理解层 · Intent</div>
+          <div class="arch-layer-items">Intent Resolver · Suggestion Engine · Employee Router · Task Template Resolver</div>
+        </div>
+      </div>
+      <div class="arch-layer hl">
+        <div class="arch-layer-num">L3</div>
+        <div class="arch-layer-body">
+          <div class="arch-layer-name">任务控制层 · Task Engine</div>
+          <div class="arch-layer-items">Harness · Task / Step / State · Verification · Recovery · 人工确认节点</div>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-layer-num">L4</div>
+        <div class="arch-layer-body">
+          <div class="arch-layer-name">执行编排层 · Orchestration</div>
+          <div class="arch-layer-items">Execution Gateway · OpenClaw Adapter · Internal Capability Adapter</div>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-layer-num">L5</div>
+        <div class="arch-layer-body">
+          <div class="arch-layer-name">Runtime 层 · OpenClaw</div>
+          <div class="arch-layer-items">Skills · Tools · Plugins · Session · Context · Events</div>
+        </div>
+      </div>
+      <div class="arch-layer hl">
+        <div class="arch-layer-num">L6</div>
+        <div class="arch-layer-body">
+          <div class="arch-layer-name">领域能力层 · Domain</div>
+          <div class="arch-layer-items">语义理解引擎 · 业务对象治理 · BKN / DKN / PKN · 找数问数 · 分析 · 发布</div>
+        </div>
+      </div>
+      <div class="arch-layer">
+        <div class="arch-layer-num">L7</div>
+        <div class="arch-layer-body">
+          <div class="arch-layer-name">状态与可信层 · Trust</div>
+          <div class="arch-layer-items">Evidence · Audit · Replay · Checkpoint · Artifact · Permission · Risk Control</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="kn-visual r d3">
+      <div class="kn-title">// Knowledge Network</div>
+      <div class="kn-nodes">
+        <div class="kn-node">
+          <div class="kn-node-dot"></div>
+          <div>
+            <div class="kn-node-label">BKN · 业务知识网络</div>
+            <div class="kn-node-desc">组织级通用业务骨架：业务域、对象、关系、规则、指标</div>
+          </div>
+        </div>
+        <div class="kn-connector"></div>
+        <div class="kn-node">
+          <div class="kn-node-dot"></div>
+          <div>
+            <div class="kn-node-label">DKN · 领域知识网络</div>
+            <div class="kn-node-desc">场景化可运行网络：意图、模板、工作流、服务入口、发布包</div>
+          </div>
+        </div>
+        <div class="kn-connector"></div>
+        <div class="kn-node">
+          <div class="kn-node-dot"></div>
+          <div>
+            <div class="kn-node-label">PKN · 个人知识网络</div>
+            <div class="kn-node-desc">个人偏好与局部策略，成熟后回流至 DKN / BKN</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:32px;">
+        <div class="kn-title">// 核心判断</div>
+        <div style="padding:20px 0; border-top:1px solid var(--rule); border-bottom:1px solid var(--rule);">
+          <p style="font-family:var(--serif); font-size:17px; line-height:1.6; color:rgba(255,255,255,0.7);">
+            真正的 AI Agent 开发，不是让模型更会聊天，而是构建一个可执行、可审计、可恢复、可协作的智能任务系统。
+          </p>
+        </div>
+      </div>
+
+      <div style="margin-top:24px; font-family:var(--mono); font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:var(--muted);">
+        <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--rule);">
+          <span>OpenClaw</span><span style="color:var(--dim);">Step-level Runtime</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--rule);">
+          <span>Semovix</span><span style="color:var(--accent-hi);">主控层</span>
+        </div>
+        <div style="display:flex; justify-content:space-between; padding:10px 0;">
+          <span>Task Engine</span><span style="color:var(--dim);">任务推进</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── XINO ── -->
+<section id="xino" class="section">
+  <div class="bg-xino-glow"></div>
+
+  <div class="xino-layout">
+    <div>
+      <div class="section-eyebrow r">Xino · 犀诺</div>
+      <h2 class="section-h2 r d1">不只是会回应<br>更会把事情做完</h2>
+      <p class="section-lead r d2">Xino 是 Semovix 的 AI 助手、工作台引导角色与官方 IP 形象。它不是单纯的吉祥物，而是代表 Semovix 的核心气质：聪明、可信、亲和、专业、能推进。</p>
+
+      <div class="xino-verbs r d2">
+        <div class="xino-verb-cell">
+          <div class="verb-en">Connect</div>
+          <div class="verb-cn">连接</div>
+          <div class="verb-desc">连接人、数据、知识、系统与任务，打通组织内分散的能力孤岛</div>
+        </div>
+        <div class="xino-verb-cell">
+          <div class="verb-en">Understand</div>
+          <div class="verb-cn">理解</div>
+          <div class="verb-desc">理解用户目标，理解业务语义，理解场景上下文与执行意图</div>
+        </div>
+        <div class="xino-verb-cell">
+          <div class="verb-en">Insight</div>
+          <div class="verb-cn">洞察</div>
+          <div class="verb-desc">发现语义冲突、异常、映射缺口和治理机会，主动提示而非等待</div>
+        </div>
+        <div class="xino-verb-cell">
+          <div class="verb-en">Execute</div>
+          <div class="verb-cn">执行</div>
+          <div class="verb-desc">组织任务、调用 Skill / Tool、推动结果落地，形成可交付闭环</div>
+        </div>
+      </div>
+
+      <div class="xino-quote-block r d3">
+        <p class="xino-quote-text">告诉我你想完成什么。<br>我会帮你判断路径、组织任务，并一步步推进。</p>
+        <p class="xino-quote-attr">— Xino｜犀诺 · AI Work Partner</p>
+      </div>
+    </div>
+
+    <!-- Xino chat frame mockup -->
+    <div class="xino-right r d3">
+      <div class="xino-frame">
+        <div class="xino-frame-header">
+          <div class="xino-frame-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <span class="xino-frame-title">Xino · AI Workbench</span>
+        </div>
+        <div class="xino-frame-body">
+          <div class="xino-chat">
+            <div class="chat-row user">
+              <div class="chat-bubble">帮我分析昨日订单异常，找出口径不一致的问题</div>
+            </div>
+
+            <div class="chat-row">
+              <div class="chat-avatar">
+                <img src="/mnt/user-data/uploads/欢迎.png" alt="Xino">
+              </div>
+              <div>
+                <div class="chat-bubble">我理解你的意图：分析订单数据异常 + 口径对齐。让我先检查相关字段的语义状态……</div>
+              </div>
+            </div>
+
+            <div class="chat-status">正在执行 · 语义分析中</div>
+
+            <div class="task-card">
+              <div class="task-card-h">// 发现 3 个治理任务</div>
+              <div class="task-item">
+                <span class="task-check">✓</span>
+                "实收金额"与"应收金额"口径冲突
+              </div>
+              <div class="task-item">
+                <span class="task-pending">→</span>
+                订单对象存在重复映射，待合并
+              </div>
+              <div class="task-item">
+                <span class="task-pending">→</span>
+                发布前检查：2 个字段语义未确认
+              </div>
+            </div>
+
+            <div class="chat-row">
+              <div class="chat-avatar">
+                <img src="/mnt/user-data/uploads/欢迎.png" alt="Xino">
+              </div>
+              <div>
+                <div class="chat-bubble">已生成 3 个可处理任务，附带证据链与推荐动作。要现在开始处理吗？</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── CONTENT / INSIGHTS ── -->
+<section id="content" class="section">
+  <div class="section-eyebrow r">Semovix Insights</div>
+  <h2 class="section-h2 r d1">技术洞察与<br>工程化指南</h2>
+
+  <div class="content-grid r d2">
+    <div class="content-card">
+      <div class="card-cat">AI Agent · 本周精选</div>
+      <h3 class="card-h3">Skill 是什么？为什么它会成为 Agent 能力沉淀的核心？</h3>
+      <p class="card-body">解释 Skill 与 Tool 的区别，以及 Skill Registry 和 Skill Runtime 的工程价值。</p>
+      <div class="card-meta">
+        <span>Semovix Team</span>
+        <span>2026-05-17</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </div>
+    <div class="content-card">
+      <div class="card-cat">Agent Engineering</div>
+      <h3 class="card-h3">Tool Calling：让 AI 从"会回答"走向"能行动"</h3>
+      <p class="card-body">讲清 Tool Calling、JSON Schema、工具权限、工具校验和工具审计的完整实现方式。</p>
+      <div class="card-meta">
+        <span>Semovix Team</span>
+        <span>1 min read</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </div>
+    <div class="content-card">
+      <div class="card-cat">Context Engineering</div>
+      <h3 class="card-h3">为什么 Agent 经常跑偏？问题可能不在模型，而在上下文</h3>
+      <p class="card-body">解释 Context Engineering 为什么是生产级 Agent 的关键能力，以及如何系统性组织上下文。</p>
+      <div class="card-meta">
+        <span>Semovix Team</span>
+        <span>1 min read</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="insight-block r d3">
+    <p class="insight-text">真正的 AI Agent 开发，不是让模型更会聊天，而是构建一个<br>可执行、可审计、可恢复、可协作的智能任务系统。</p>
+    <p class="insight-attr">— Semovix · AI Agent 工程化指南 · 核心判断</p>
+  </div>
+</section>
+
+<!-- ── CTA ── -->
+<section id="cta" class="section">
+  <div class="cta-bg"></div>
+  <div class="cta-content">
+    <h2 class="cta-h2 r">
+      让 AI 真正<br><em>参与工作</em>
+    </h2>
+    <p class="cta-sub r d1">Semovix 不是一个只会回答问题的 AI。<br>它是让组织真正看懂数据、组织知识、推进任务、完成执行的智能平台。</p>
+    <div class="r d2" style="display:flex; gap:12px; justify-content:center;">
+      <button class="btn-solid">预约产品演示</button>
+      <button class="btn-outline">阅读工程化指南 →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-left">
+    <div class="footer-logo">
+      <img src="/mnt/user-data/uploads/semovix-logo.png" alt="Semovix">
+      <span class="footer-logo-text">SEMOVIX · 赛慕维</span>
+    </div>
+  </div>
+  <div class="footer-center">© 2026 Semovix · Built for enterprise AI Agent engineering</div>
+  <div class="footer-right">
+    <a href="https://doc.semovix.com/ai-agent-engineering-guide">指南</a>
+    <a href="https://doc.semovix.com/blog">博客</a>
+    <a href="https://github.com/semovix/semovix-content">GitHub</a>
+  </div>
+</footer>
+
+<script>
+// Scroll reveal
+const els = document.querySelectorAll('.r');
+const io = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('in');
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -40px 0px' });
+els.forEach(el => io.observe(el));
+
+// Nav active state
+const sections = document.querySelectorAll('section[id]');
+const navAs = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let cur = '';
+  sections.forEach(s => { if (window.scrollY >= s.offsetTop - 80) cur = s.id; });
+  navAs.forEach(a => {
+    const active = a.getAttribute('href') === '#' + cur;
+    a.style.color = active ? '#fff' : '';
+  });
+}, { passive: true });
+</script>
+</body>
+</html>

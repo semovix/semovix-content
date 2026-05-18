@@ -115,16 +115,6 @@ const config: Config = {
           position: 'left',
         },
         {
-          to: '/semovix',
-          label: 'Semovix',
-          position: 'left',
-        },
-        {
-          to: '/xino',
-          label: 'Xino',
-          position: 'left',
-        },
-        {
           href: 'https://github.com/semovix/semovix-content',
           label: 'GitHub',
           position: 'right',
@@ -156,12 +146,16 @@ const config: Config = {
           title: 'Semovix',
           items: [
             {
-              label: '产品介绍',
-              to: '/semovix',
+              label: '产品架构',
+              to: '/#arch',
             },
             {
-              label: 'Xino',
-              to: '/xino',
+              label: '执行闭环',
+              to: '/#loop',
+            },
+            {
+              label: 'Xino 智能体',
+              to: '/#xino',
             },
             {
               label: '语义治理',
